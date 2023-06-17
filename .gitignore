@@ -1,0 +1,11 @@
+### VS Code ###
+.vscode/*
+/frontend/.vscode/*
+/backend/.vscode/*
+
+### Node ###
+/frontend/node_modules
+/backend/node_modules
+
+### Miscellaneous ###
+/frontend/.angular/cache
