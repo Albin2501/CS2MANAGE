@@ -9,3 +9,4 @@
 
 ### Miscellaneous ###
 /frontend/.angular/cache
+/backend/src/persistence/file/*
