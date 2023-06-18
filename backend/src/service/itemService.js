@@ -13,14 +13,18 @@ async function getAllItems() {
         let toBeCached = [];
         let priceSCM;
         let priceSP;
+        let itemSP;
         let priceSPEverything = await getPriceSPEverything();
 
         // calculated price are median_price (SCM) and suggested_price (SP)
         for (let i = 0; i < allItems.length; i++) {
             priceSCM = (await getPriceSCM(allItems[i].name)).median_price;
-            priceSP = binarySearch.search(allItems[i].name, priceSPEverything).suggested_price;
+            itemSP = binarySearch.search(allItems[i].name, priceSPEverything);
+            priceSP = itemSP.suggested_price;
+            linkSCM = "https://steamcommunity.com/market/listings/730/" + allItems[i].name;
+            linkSP = itemSP.market_page + "&sort=price&order=asc";
 
-            toBeCached.push(itemMapper.itemToItemDTO(allItems[i], priceSCM ? +priceSCM.split('€')[0].replace(',', '.') : priceSCM, priceSP));
+            toBeCached.push(itemMapper.itemToItemDTO(allItems[i], priceSCM ? +priceSCM.split('€')[0].replace(',', '.') : priceSCM, priceSP, linkSCM, linkSP));
         }
 
         cache.set(toBeCached);

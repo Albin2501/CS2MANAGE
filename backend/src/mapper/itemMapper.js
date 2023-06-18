@@ -1,6 +1,6 @@
 // ------------------------------- EXPORTED FUNCTIONS -------------------------------
 
-function itemToItemDTO(item, priceSCM, priceSP) {
+function itemToItemDTO(item, priceSCM, priceSP, linkSCM, linkSP) {
     const price = +item.price.toFixed(2);
     priceSCM = priceSCM ? +priceSCM.toFixed(2) : -1;
     priceSP = priceSP ? +priceSP.toFixed(2) : -1;
@@ -9,6 +9,8 @@ function itemToItemDTO(item, priceSCM, priceSP) {
         id: item.id,
         name: item.name,
         image: item.image,
+        linkSCM: linkSCM,
+        linkSP: linkSP,
         date: item.date,
         price: price,
         priceSCM: priceSCM,
