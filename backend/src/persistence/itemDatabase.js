@@ -1,41 +1,45 @@
 const fs = require('fs');
 const filePath = './src/persistence/file/itemDatabase.json';
 
+const binarySearch = require('../util/binarySearch');
+
 // ------------------------------- EXPORTED FUNCTIONS -------------------------------
 
 function get() {
-    // if database.json does not exist yet, create it
-    if (!fs.existsSync(filePath)) writeToFile([]);
+    // if itemDatabase.json does not exist yet, create it
+    if (!fs.existsSync(filePath)) writeToFile({ id: 0, items: [] });
 
     return readFromFile();
 }
 
 function set(item) {
     const itemDatabase = get();
+    item.id = itemDatabase.id;
 
-    for (let i = 0; i < itemDatabase.length; i++) {
-        if (item.id == itemDatabase[i].id) throw error("ID of item must be unique.");
-    }
+    // if id already exists, throw error
+    if (binarySearch.searchId(item.id, itemDatabase.items)) throw new Error("Id of item must be unique.");
 
-    itemDatabase.push(item);
+    itemDatabase.items.push(item);
+    itemDatabase.id++;
     writeToFile(itemDatabase);
 }
 
 function remove(id) {
     const itemDatabase = get();
+    let item;
 
-    for (let i = 0; i < itemDatabase.length; i++) {
-        if (id == itemDatabase[i].id) {
-            console.log(id);
-            console.log(i);
-            itemDatabase.splice(i, 1);
+    for (let i = 0; i < itemDatabase.items.length; i++) {
+        if (id == itemDatabase.items[i].id) {
+            item = itemDatabase.items.splice(i, 1)[0];
             writeToFile(itemDatabase);
         }
     }
+
+    return item;
 }
 
 function removeAll(id) {
-    writeToFile([]);
+    writeToFile({ id: 0, items: [] });
 }
 
 module.exports = { get, set, remove, removeAll };

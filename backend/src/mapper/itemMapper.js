@@ -25,9 +25,9 @@ function itemToItemDTO(item, priceSCM, priceSP, linkSCM, linkSP) {
     return itemDTO;
 }
 
-function itemDTOToItem(itemDTO, id, image) {
+function itemDTOToItem(itemDTO, image) {
     const item = {
-        id: id,
+        id: -1,
         name: itemDTO.name,
         image: image ? image : "no image",
         date: itemDTO.date,
@@ -41,5 +41,3 @@ function itemDTOToItem(itemDTO, id, image) {
 }
 
 module.exports = { itemDTOToItem, itemToItemDTO };
-
-// ------------------------------- HELPER FUNCTIONS -------------------------------

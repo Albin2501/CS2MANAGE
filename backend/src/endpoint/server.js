@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
 const itemService = require('../service/itemService');
+const historyService = require('../service/historyService');
 
 // ------------------------------- INITIALIZATION -------------------------------
 
@@ -27,13 +28,29 @@ app.post('/postItem', jsonParser, async function (req, res) {
     res.sendStatus(204);
 });
 
-app.delete('/deleteItem', jsonParser, async function (req, res) {
+app.delete('/deleteItem', async function (req, res) {
     itemService.deleteItem(req.query.id);
     res.sendStatus(204);
 });
 
-app.delete('/deleteAllItems', jsonParser, async function (req, res) {
+app.delete('/deleteAllItems', async function (req, res) {
     itemService.deleteAllItems();
+    res.sendStatus(204);
+});
+
+
+
+app.get('/getHistory', async function (req, res) {
+    res.send(historyService.getHistory());
+});
+
+app.delete('/deleteHistoryEntry', async function (req, res) {
+    historyService.deleteHistoryEntry(req.query.id);
+    res.sendStatus(204);
+});
+
+app.delete('/deleteHistory', async function (req, res) {
+    historyService.deleteHistory();
     res.sendStatus(204);
 });
 
