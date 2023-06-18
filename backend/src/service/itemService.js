@@ -37,7 +37,17 @@ async function postItem(itemDTO) {
     cache.setDirty();
 }
 
-module.exports = { getAllItems, postItem };
+function deleteItem(id) {
+    itemDatabase.remove(id);
+    cache.setDirty();
+}
+
+function deleteAllItems() {
+    itemDatabase.removeAll();
+    cache.setDirty();
+}
+
+module.exports = { getAllItems, postItem, deleteItem, deleteAllItems };
 
 // ------------------------------- HELPER FUNCTIONS -------------------------------
 

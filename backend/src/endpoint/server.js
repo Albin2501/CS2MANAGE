@@ -27,4 +27,14 @@ app.post('/postItem', jsonParser, async function (req, res) {
     res.sendStatus(204);
 });
 
+app.delete('/deleteItem', jsonParser, async function (req, res) {
+    itemService.deleteItem(req.query.id);
+    res.sendStatus(204);
+});
+
+app.delete('/deleteAllItems', jsonParser, async function (req, res) {
+    itemService.deleteAllItems();
+    res.sendStatus(204);
+});
+
 app.listen(2501);
