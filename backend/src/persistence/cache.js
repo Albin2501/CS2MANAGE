@@ -26,6 +26,11 @@ function set(items) {
         totalProfitSP += items[i].totalProfitSP;
     }
 
+    amount = +(amount.toFixed(2));
+    totalPrice = +(totalPrice.toFixed(2));
+    totalProfitSCM = +(totalProfitSCM.toFixed(2));
+    totalProfitSP = +(totalProfitSP.toFixed(2));
+
     const cache = {
         amount: amount,
         date: new Date(),

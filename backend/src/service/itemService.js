@@ -41,21 +41,21 @@ async function postItem(itemDTO) {
 
     itemDatabase.set(item);
     cache.setDirty();
-    historyService.postHistoryEntry(item, historyType.type.CREATE);
+    historyService.postHistoryEntry(item, historyType.type.CREATE_ITEM);
 }
 
 function deleteItem(id) {
     const item = itemDatabase.remove(id);
 
     cache.setDirty();
-    if (item) historyService.postHistoryEntry(item, historyType.type.DELETE);
+    if (item) historyService.postHistoryEntry(item, historyType.type.DELETE_ITEM);
 }
 
 function deleteAllItems() {
     itemDatabase.removeAll();
 
     cache.setDirty();
-    historyService.postHistoryEntry(null, historyType.type.DELETEALL);
+    historyService.postHistoryEntry(null, historyType.type.DELETE_ALLITEMS);
 }
 
 module.exports = { getAllItems, postItem, deleteItem, deleteAllItems };

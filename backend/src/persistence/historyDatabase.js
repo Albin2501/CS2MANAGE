@@ -17,7 +17,7 @@ function set(historyEntry) {
     historyEntry.id = historyDatabase.id;
 
     // if id already exists, throw error
-    if (binarySearch.searchId(historyEntry.id, historyDatabase.history)) throw new Error("Id of historyEntry must be unique.");
+    if (binarySearch.searchId(historyEntry.id, historyDatabase.history)) throw new Error('Id of historyEntry must be unique.');
 
     historyDatabase.history.push(historyEntry);
     historyDatabase.id++;

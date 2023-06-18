@@ -13,11 +13,11 @@ function get() {
 }
 
 function set(item) {
-    const itemDatabase = get();
+    const itemDatabase = get(null);
     item.id = itemDatabase.id;
 
     // if id already exists, throw error
-    if (binarySearch.searchId(item.id, itemDatabase.items)) throw new Error("Id of item must be unique.");
+    if (binarySearch.searchId(item.id, itemDatabase.items)) throw new Error('Id of item must be unique.');
 
     itemDatabase.items.push(item);
     itemDatabase.id++;
@@ -25,7 +25,7 @@ function set(item) {
 }
 
 function remove(id) {
-    const itemDatabase = get();
+    const itemDatabase = get(null);
     let item;
 
     for (let i = 0; i < itemDatabase.items.length; i++) {
