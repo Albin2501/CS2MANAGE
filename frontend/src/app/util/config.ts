@@ -1,1 +1,1 @@
-export const base = 2501;
+export const base = 'http://localhost:2501';

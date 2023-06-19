@@ -14,8 +14,8 @@ export class HistoryService {
 
   constructor(private http: HttpClient) { }
 
-  get(): Observable<HistoryEntryDTO> {
-    return this.http.get<HistoryEntryDTO>(this.historyBase + '/get');
+  get(): Observable<HistoryEntryDTO[]> {
+    return this.http.get<HistoryEntryDTO[]>(this.historyBase + '/get');
   }
 
   delete(id: number): Observable<void> {

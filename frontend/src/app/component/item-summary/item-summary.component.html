@@ -1,0 +1,11 @@
+<p>Amount: {{itemSummary.amount}}</p>
+<p>date: {{itemSummary.date}}</p>
+<p>dirty: {{itemSummary.dirty}}</p>
+<p>totalPrice: {{itemSummary.totalPrice}}</p>
+<p>totalProfitSCM: {{itemSummary.totalProfitSCM}}</p>
+<p>totalProfitSP: {{itemSummary.totalProfitSP}}</p>
+<p *ngFor='let item of itemSummary.items'>name of item: {{item.name}}</p>
+
+<div *ngFor='let item of itemSummary.items'>
+    <img src="{{item.image}}" alt="Image of {{item.name}}">
+</div>

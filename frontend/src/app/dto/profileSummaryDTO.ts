@@ -1,4 +1,4 @@
-import { ItemDetailDTO } from "./itemDetailDTO";
+import { ItemDetailDTO } from './itemDetailDTO';
 
 export interface ProfileSummaryDTO {
     id: number;
