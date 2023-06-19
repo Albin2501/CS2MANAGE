@@ -21,49 +21,52 @@ app.use(function (req, res, next) {
 // ------------------------------- ENDPOINTS -------------------------------
 
 // ------------------------------- ITEM
+const itemBase = '/item';
 
-app.get('/getAllItems', async function (req, res) {
-    res.send(await itemService.getAllItems().catch(reason => console.log(reason)));
+app.get(itemBase + '/get', async function (req, res) {
+    res.send(await itemService.getAllItems());
 });
 
-app.post('/postItem', jsonParser, async function (req, res) {
+app.post(itemBase + '/post', jsonParser, async function (req, res) {
     await itemService.postItem(req.body).catch(reason => console.log(reason))
     res.sendStatus(204);
 });
 
-app.delete('/deleteItem', async function (req, res) {
-    itemService.deleteItem(req.query.id).catch(reason => console.log(reason));
+app.delete(itemBase + '/delete', async function (req, res) {
+    itemService.deleteItem(req.query.id);
     res.sendStatus(204);
 });
 
-app.delete('/deleteAllItems', async function (req, res) {
-    itemService.deleteAllItems().catch(reason => console.log(reason));
+app.delete(itemBase + '/deleteAll', async function (req, res) {
+    itemService.deleteAllItems();
     res.sendStatus(204);
 });
 
 // ------------------------------- PROFILE
+const profileBase = '/profile';
 
-app.get('/getAllItemsOfProfiles', async function (req, res) {
+app.get(profileBase + '/get', async function (req, res) {
     res.send(await profileService.getAllItemsOfProfiles().catch(reason => console.log(reason)));
 });
 
-app.patch('/editProfile', jsonParser, async function (req, res) {
-    profileService.editProfile(req.body).catch(reason => console.log(reason));
+app.patch(profileBase + '/edit', jsonParser, async function (req, res) {
+    profileService.editProfile(req.body);
     res.sendStatus(204);
 });
 
 // ------------------------------- HISTORY
+const historyBase = '/history';
 
-app.get('/getHistory', async function (req, res) {
-    res.send(historyService.getHistory().catch(reason => console.log(reason)));
+app.get(historyBase + '/get', async function (req, res) {
+    res.send(historyService.getHistory());
 });
 
-app.delete('/deleteHistoryEntry', async function (req, res) {
-    historyService.deleteHistoryEntry(req.query.id).catch(reason => console.log(reason));
+app.delete(historyBase + '/delete', async function (req, res) {
+    historyService.deleteHistoryEntry(req.query.id);
     res.sendStatus(204);
 });
 
-app.delete('/deleteHistory', async function (req, res) {
-    historyService.deleteHistory().catch(reason => console.log(reason));
+app.delete(historyBase + '/deleteAll', async function (req, res) {
+    historyService.deleteHistory();
     res.sendStatus(204);
 });

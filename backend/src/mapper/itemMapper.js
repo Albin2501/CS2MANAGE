@@ -23,9 +23,9 @@ function itemToItemDTO(item, priceSCM, priceSP, linkSCM, linkSP) {
 
 function itemDTOToItem(itemDTO, image) {
     const item = {
-        id: -1,
+        id: null,
         name: itemDTO.name,
-        image: image ? image : "no image",
+        image: image,
         date: itemDTO.date,
         price: itemDTO.price,
         amount: itemDTO.amount,

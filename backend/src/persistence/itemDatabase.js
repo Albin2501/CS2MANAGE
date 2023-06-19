@@ -13,7 +13,7 @@ function get() {
 }
 
 function set(item) {
-    const itemDatabase = get(null);
+    const itemDatabase = get();
     item.id = itemDatabase.id;
 
     // if id already exists, throw error
@@ -25,7 +25,7 @@ function set(item) {
 }
 
 function remove(id) {
-    const itemDatabase = get(null);
+    const itemDatabase = get();
     let item;
 
     for (let i = 0; i < itemDatabase.items.length; i++) {
