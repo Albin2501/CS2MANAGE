@@ -48,7 +48,8 @@ function upToDate() {
     const cache = get();
     let nowMinusOneHour = new Date();
     nowMinusOneHour.setHours(nowMinusOneHour.getHours() - 1);
-    return nowMinusOneHour < cache.date;
+
+    return nowMinusOneHour < new Date(cache.date);
 }
 
 function dirty() {

@@ -1,6 +1,7 @@
 // ------------------------------- EXPORTED FUNCTIONS -------------------------------
 
 function searchItemSP(name, result) {
+    if (result && result.errors) return null;
     let m = 0;
     let n = result.length - 1;
 
@@ -17,7 +18,7 @@ function searchItemSP(name, result) {
         }
     }
 
-    return -1;
+    return null;
 }
 
 function searchId(id, result) {

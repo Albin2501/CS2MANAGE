@@ -8,25 +8,46 @@ const binarySearch = require('../util/binarySearch');
 
 // ------------------------------- EXPORTED FUNCTIONS -------------------------------
 
+/**
+ * Retrieves all items from itemDatabase.json and caches them with SCM/SP prices
+ * If cache is not up-to-date then new SCM/SP prices will be retrieved
+ * If cache is dirty (inconsistent) then it will be adjusted to match itemDatabase.json // TODO
+ * @return {Object}         Cache containing metadata and items
+ */
 async function getAllItems() {
     if (!cache.upToDate() || cache.dirty()) {
-        // if cache is not up-to-date / dirty (inconsistent with itemDatabase) then get new SCM and SP prices
+        console.log("Cache is not up-to-date. New API-requests will be made.");
+
         const allItems = itemDatabase.get().items;
         let toBeCached = [];
+        let possiblePriceSCM;
         let priceSCM;
+        let possibleItemSP;
         let priceSP;
-        let itemSP;
         let priceSPEverything = await getPriceSPEverything();
 
         // calculated price are median_price (SCM) and suggested_price (SP)
         for (let i = 0; i < allItems.length; i++) {
-            priceSCM = (await getPriceSCM(allItems[i].name)).median_price;
-            itemSP = binarySearch.searchItemSP(allItems[i].name, priceSPEverything);
-            priceSP = itemSP.suggested_price;
-            linkSCM = "https://steamcommunity.com/market/listings/730/" + allItems[i].name;
-            linkSP = itemSP.market_page + "&sort=price&order=asc";
+            possiblePriceSCM = await getPriceSCM(allItems[i].name);
+            possibleItemSP = binarySearch.searchItemSP(allItems[i].name, priceSPEverything);
 
-            toBeCached.push(itemMapper.itemToItemDTO(allItems[i], priceSCM ? +priceSCM.split('€')[0].replace(',', '.') : priceSCM, priceSP, linkSCM, linkSP));
+            if (possiblePriceSCM && possiblePriceSCM.success) {
+                priceSCM = possiblePriceSCM.median_price ? +(possiblePriceSCM.median_price.split('€')[0].replace(',', '.')) : +(possiblePriceSCM.lowest_price.split('€')[0].replace(',', '.'));
+                linkSCM = "https://steamcommunity.com/market/listings/730/" + allItems[i].name;
+            } else {
+                priceSCM = null;
+                linkSCM = null;
+            }
+
+            if (possibleItemSP) {
+                priceSP = possibleItemSP.suggested_price;
+                linkSP = possibleItemSP.market_page + "&sort=price&order=asc";
+            } else {
+                priceSP = null;
+                linkSP = null;
+            }
+
+            toBeCached.push(itemMapper.itemToItemDTO(allItems[i], priceSCM, priceSP, linkSCM, linkSP));
         }
 
         cache.set(toBeCached);
@@ -35,8 +56,18 @@ async function getAllItems() {
     return cache.get();
 }
 
+/**
+ * Sends mapped object from frontend to the persistence layer so it can be saved. Before it gets persisted,
+ * the image of the item will be fetched from steam to assure that the item exists. Only if the image exists,
+ * the item will be persisted.
+ * @param  {Object} itemDTO Object send from frontend
+ */
 async function postItem(itemDTO) {
+    const noImage = 'https://community.cloudflare.steamstatic.com/economy/image//360fx360f';
     const image = await getImage(itemDTO.name);
+
+    if (image == noImage) throw Error(`Item '${itemDTO.name}' does not exists.`);
+
     const item = itemMapper.itemDTOToItem(itemDTO, image);
 
     itemDatabase.set(item);

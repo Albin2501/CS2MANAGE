@@ -23,47 +23,47 @@ app.use(function (req, res, next) {
 // ------------------------------- ITEM
 
 app.get('/getAllItems', async function (req, res) {
-    res.send(await itemService.getAllItems());
+    res.send(await itemService.getAllItems().catch(reason => console.log(reason)));
 });
 
 app.post('/postItem', jsonParser, async function (req, res) {
-    await itemService.postItem(req.body)
+    await itemService.postItem(req.body).catch(reason => console.log(reason))
     res.sendStatus(204);
 });
 
 app.delete('/deleteItem', async function (req, res) {
-    itemService.deleteItem(req.query.id);
+    itemService.deleteItem(req.query.id).catch(reason => console.log(reason));
     res.sendStatus(204);
 });
 
 app.delete('/deleteAllItems', async function (req, res) {
-    itemService.deleteAllItems();
+    itemService.deleteAllItems().catch(reason => console.log(reason));
     res.sendStatus(204);
 });
 
 // ------------------------------- PROFILE
 
 app.get('/getAllItemsOfProfiles', async function (req, res) {
-    res.send(await profileService.getAllItemsOfProfiles());
+    res.send(await profileService.getAllItemsOfProfiles().catch(reason => console.log(reason)));
 });
 
 app.patch('/editProfile', jsonParser, async function (req, res) {
-    profileService.editProfile(req.body);
+    profileService.editProfile(req.body).catch(reason => console.log(reason));
     res.sendStatus(204);
 });
 
 // ------------------------------- HISTORY
 
 app.get('/getHistory', async function (req, res) {
-    res.send(historyService.getHistory());
+    res.send(historyService.getHistory().catch(reason => console.log(reason)));
 });
 
 app.delete('/deleteHistoryEntry', async function (req, res) {
-    historyService.deleteHistoryEntry(req.query.id);
+    historyService.deleteHistoryEntry(req.query.id).catch(reason => console.log(reason));
     res.sendStatus(204);
 });
 
 app.delete('/deleteHistory', async function (req, res) {
-    historyService.deleteHistory();
+    historyService.deleteHistory().catch(reason => console.log(reason));
     res.sendStatus(204);
 });
