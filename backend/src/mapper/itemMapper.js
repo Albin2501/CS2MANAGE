@@ -26,7 +26,7 @@ function itemDTOToItem(itemDTO, image) {
         id: null,
         name: itemDTO.name,
         image: image,
-        date: itemDTO.date,
+        date: new Date(),
         price: itemDTO.price,
         amount: itemDTO.amount,
         totalPrice: itemDTO.price * itemDTO.amount,

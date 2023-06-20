@@ -29,20 +29,27 @@ async function getAllItems() {
         // calculated price are median_price (SCM) and suggested_price (SP)
         for (let i = 0; i < allItems.length; i++) {
             possiblePriceSCM = await getPriceSCM(allItems[i].name);
-            possibleItemSP = binarySearch.searchItemSP(allItems[i].name, priceSPEverything);
+
+            // TODO: This is a work-around. Fix this to be in O(n * log(m)).
+            if (allItems[i].name.includes('★')) {
+                filteredArray = priceSPEverything.filter(item => allItems[i].name.localeCompare(item.market_hash_name) == 0);
+                possibleItemSP = filteredArray.length > 0 ? filteredArray[0] : null;
+            } else possibleItemSP = binarySearch.searchItemSP(allItems[i].name, priceSPEverything);
 
             if (possiblePriceSCM && possiblePriceSCM.success) {
-                priceSCM = possiblePriceSCM.median_price ? +(possiblePriceSCM.median_price.split('€')[0].replace(',', '.')) : +(possiblePriceSCM.lowest_price.split('€')[0].replace(',', '.'));
+                priceSCM = possiblePriceSCM.median_price ? getNumberFromSCMString(possiblePriceSCM.median_price) : getNumberFromSCMString(possiblePriceSCM.lowest_price);
                 linkSCM = "https://steamcommunity.com/market/listings/730/" + allItems[i].name;
             } else {
+                console.log(`The item ${allItems[i].name} could not be fetched from SCM.`);
                 priceSCM = null;
                 linkSCM = null;
             }
 
             if (possibleItemSP) {
                 priceSP = possibleItemSP.suggested_price;
-                linkSP = possibleItemSP.market_page + "&sort=price&order=asc";
+                linkSP = possibleItemSP.market_page + getQueryParams(allItems[i].name);
             } else {
+                console.log(`The item ${allItems[i].name} could not be fetched from SP.`);
                 priceSP = null;
                 linkSP = null;
             }
@@ -66,7 +73,10 @@ async function postItem(itemDTO) {
     const noImage = 'https://community.cloudflare.steamstatic.com/economy/image//360fx360f';
     const image = await getImage(itemDTO.name);
 
-    if (image == noImage) throw Error(`Item '${itemDTO.name}' does not exists.`);
+    if (image == noImage) {
+        console.log(`Item '${itemDTO.name}' does not exists.`);
+        return;
+    }
 
     const item = itemMapper.itemDTOToItem(itemDTO, image);
 
@@ -101,7 +111,7 @@ const skinportURI = 'https://api.skinport.com/v1/items';
 
 async function getPriceSCM(name) {
     try {
-        return await (await fetch(steamSCMURI + name)).json();
+        return await (await fetch(encodeURI(steamSCMURI + name))).json(); // TODO
     } catch (err) {
         console.log(err);
     }
@@ -131,4 +141,36 @@ async function getImage(name) {
         console.log(err);
     }
     return null;
+}
+
+function getNumberFromSCMString(value) {
+    return +(value.replace(' ', '').replace(',', '.').replaceAll('-', '0').replace('€', ''));
+}
+
+function getQueryParams(name) {
+    let query = '&sort=price&order=asc';
+    let weapon = false;
+    let conditions = {
+        1: '(Battle-Scarred)',
+        2: '(Factory New)',
+        3: '(Field-Tested)',
+        4: '(Minimal Wear)',
+        5: '(Well-Worn)'
+    };
+
+    for (let i = 1; i <= Object.keys(conditions).length; i++) {
+        if (name.endsWith(conditions[i])) {
+            query += '&exterior=' + i;
+            weapon = true;
+        }
+    }
+
+    if (weapon) {
+        if (name.includes('StatTrak™')) query += '&stattrak=1';
+        else query += '&stattrak=0';
+        if (name.includes('Souvenir')) query += '&souvenir=1';
+        else query += '&souvenir=0';
+    }
+
+    return query;
 }

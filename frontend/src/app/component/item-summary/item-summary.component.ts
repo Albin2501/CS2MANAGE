@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ItemSummaryDTO } from 'src/app/dto/itemSummaryDTO';
 
+import { ItemSummaryDTO } from 'src/app/dto/itemSummaryDTO';
 import { ItemService } from 'src/app/service/item/item.service';
+import { formatDate, formatPrice } from 'src/app/util/formatter';
 
 @Component({
   selector: 'app-item-summary',
@@ -27,5 +28,13 @@ export class ItemSummaryComponent implements OnInit {
         console.log(error);
       }
     });
+  }
+
+  formatDate(date: Date): string {
+    return formatDate(new Date(date));
+  }
+
+  formatPrice(number: number, bool: boolean): string {
+    return formatPrice(number, bool);
   }
 }

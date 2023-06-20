@@ -28,7 +28,7 @@ app.get(itemBase + '/get', async function (req, res) {
 });
 
 app.post(itemBase + '/post', jsonParser, async function (req, res) {
-    await itemService.postItem(req.body).catch(reason => console.log(reason))
+    await itemService.postItem(req.body);
     res.sendStatus(204);
 });
 

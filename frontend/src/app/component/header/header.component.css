@@ -1,0 +1,21 @@
+.header {
+    display: flex;
+    align-items: center;
+    padding: 1rem 0.5rem;
+    background: linear-gradient(90deg, rgb(75, 40, 0) 0%, rgba(3, 0, 10) 3%);
+
+}
+
+.header * {
+    display: inline;
+}
+
+.logo {
+    letter-spacing: 3px;
+    font-size: 1.75rem;
+}
+
+.letter {
+    font-weight: bold;
+    color: rgb(255, 140, 10);
+}
