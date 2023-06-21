@@ -21,11 +21,11 @@ function createContentsFromItem(item, type) {
     let responseString = 'Something went wrong ...';
 
     if (type == historyEntry.type.CREATE_ITEM) {
-        responseString = `Item '${item.name} (Price: ${item.price}, Amount: ${item.amount})' has been added.`;
+        responseString = `Item '${item.name}' (${item.amount} / ${item.price}€) has been added.`;
     } else if (type == historyEntry.type.INFO) {
         responseString = 'TODO'
     } else if (type == historyEntry.type.DELETE_ITEM) {
-        responseString = `Item '${item.name} (Price: ${item.price}, Amount: ${item.amount})' has been deleted.`;
+        responseString = `Item '${item.name}' (${item.amount} / ${item.price}€) has been deleted.`;
     } else if (type == historyEntry.type.DELETE_ALLITEMS) {
         responseString = 'Every item has been deleted.';
     } else if (type == historyEntry.type.EDIT_PROFILE) {

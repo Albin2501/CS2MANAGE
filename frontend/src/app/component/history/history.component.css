@@ -1,0 +1,72 @@
+.history {
+    display: grid;
+    align-items: center;
+    justify-items: center;
+}
+
+.historyEntryContainer {
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 64rem;
+    background-color: rgb(65, 70, 90);
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.historyEntry {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+        'contents contents'
+        'date deleteButton';
+    transition: transform 0.2s;
+    padding: 0.5rem;
+}
+
+.historyEntry:hover {
+    transform: scale(1.005);
+    box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.25);
+}
+
+.contents {
+    font-size: 1.25rem;
+    grid-area: contents;
+}
+
+.date {
+    grid-area: date;
+    font-size: 0.75rem;
+    align-self: end;
+}
+
+.deleteButton {
+    grid-area: deleteButton;
+    max-width: 25px;
+    justify-self: end;
+    border: 0;
+}
+
+.deleteButton:hover {
+    background: rgb(230, 100, 100);
+}
+
+.INFO {
+    background: rgb(120, 120, 100);
+}
+
+.CREATE_ITEM {
+    background: rgb(100, 129, 100);
+}
+
+.DELETE_ITEM {
+    background: rgb(120, 100, 100);
+}
+
+.DELETE_ALLITEMS {
+    background: rgb(150, 100, 100);
+}
+
+.EDIT_PROFILE {
+    background: rgb(100, 100, 120);
+}

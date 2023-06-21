@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { HistoryEntryDTO } from 'src/app/dto/historyEntryDTO';
 import { HistoryService } from 'src/app/service/history/history.service';
 
+import { formatDate } from 'src/app/util/formatter';
+
 @Component({
   selector: 'app-history',
   templateUrl: './history.component.html',
@@ -49,5 +51,9 @@ export class HistoryComponent implements OnInit {
         this.get();
       }
     });
+  }
+
+  formatDate(date: Date): string {
+    return formatDate(new Date(date));
   }
 }

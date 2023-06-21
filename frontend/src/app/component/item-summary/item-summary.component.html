@@ -14,7 +14,7 @@
                 [ngClass]="{'pos': item.totalProfitSP >= 0, 'neg' : item.totalProfitSP < 0 }" href='{{item.linkSP}}'
                 target="_blank">{{formatPrice(item.totalProfitSP, false)}}</a>
             <ng-template #noSP>
-                <div class='price'>unknown</div>
+                <div class='price'>error</div>
             </ng-template>
         </div>
         <div class='price totalProfitSCM'>

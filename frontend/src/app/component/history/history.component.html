@@ -1,2 +1,9 @@
-<p *ngFor="let historyEntry of history">Contents: {{historyEntry.contents}}, Date: {{historyEntry.date}}, Contents:
-    {{historyEntry.contents}}, Date: {{historyEntry.date}}, Id: {{historyEntry.id}}, Type: {{historyEntry.type}}</p>
+<div class='history'>
+    <div class='historyEntryContainer' *ngFor='let historyEntry of history'>
+        <div class='historyEntry {{historyEntry.type}}'>
+            <div class='contents'>{{historyEntry.contents}}</div>
+            <div class='date'>{{formatDate(historyEntry.date)}}</div>
+            <button class='deleteButton' (click)='delete(historyEntry.id)'>🗑</button>
+        </div>
+    </div>
+</div>

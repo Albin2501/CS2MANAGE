@@ -2,7 +2,7 @@ type type = 'INFO' | 'CREATE_ITEM' | 'DELETE_ITEM' | 'DELETE_ALLITEMS' | 'EDIT_P
 
 export interface HistoryEntryDTO {
     id: number;
-    date: string;
+    date: Date;
     contents: string,
     type: type
 }

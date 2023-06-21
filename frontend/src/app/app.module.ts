@@ -7,13 +7,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { ItemSummaryComponent } from './component/item-summary/item-summary.component';
 import { HistoryComponent } from './component/history/history.component';
 import { HeaderComponent } from './component/header/header.component';
+import { ItemManageComponent } from './component/item-manage/item-manage.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ItemSummaryComponent,
     HistoryComponent,
-    HeaderComponent
+    HeaderComponent,
+    ItemManageComponent
   ],
   imports: [
     BrowserModule,

@@ -9,8 +9,8 @@
     grid-template-columns: fit-content(1rem) 2fr 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     grid-template-areas:
-        "image name name date"
-        "image totalPrice totalProfitSP totalProfitSCM";
+        'image name name date'
+        'image totalPrice totalProfitSP totalProfitSCM';
     background-color: rgb(65, 70, 90);
     border-radius: 0.25rem;
     margin-top: 1rem;
@@ -25,10 +25,6 @@
     box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.5);
 }
 
-img {
-    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.25);
-}
-
 .image {
     grid-area: image;
     background: rgb(220, 220, 220);
@@ -37,6 +33,7 @@ img {
     height: 125px;
     align-self: center;
     justify-self: center;
+    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.25);
 }
 
 .name {
@@ -100,14 +97,14 @@ img {
 .itemSummary {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: 2fr;
+    grid-template-rows: 1fr 1fr;
     grid-template-areas:
-        "amountSummaryText totalPriceText totalProfitSPText totalProfitSCMText"
-        "amountSummary totalPrice totalProfitSP totalProfitSCM";
+        'amountSummaryText totalPriceText totalProfitSPText totalProfitSCMText'
+        'amountSummary totalPrice totalProfitSP totalProfitSCM';
     background-color: rgba(3, 0, 10);
     border-radius: 0.25rem;
     padding: 1rem 0;
-    min-width: 64rem;
+    width: 100%;
     max-width: 64rem;
     color: rgb(256, 256, 256);
 }
@@ -117,13 +114,12 @@ img {
     justify-self: center;
     font-size: 1.5rem;
     font-weight: 550;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
 }
 
 .summary {
     align-self: center;
     justify-self: center;
-    margin: 0;
     font-size: 1.5rem;
 }
 
