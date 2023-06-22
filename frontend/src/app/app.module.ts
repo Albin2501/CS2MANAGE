@@ -8,6 +8,7 @@ import { ItemSummaryComponent } from './component/item-summary/item-summary.comp
 import { HistoryComponent } from './component/history/history.component';
 import { HeaderComponent } from './component/header/header.component';
 import { ItemManageComponent } from './component/item-manage/item-manage.component';
+import { LoadingComponent } from './component/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { ItemManageComponent } from './component/item-manage/item-manage.compone
     ItemSummaryComponent,
     HistoryComponent,
     HeaderComponent,
-    ItemManageComponent
+    ItemManageComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,

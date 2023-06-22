@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
-import { base } from '../../util/config';
+import { backendBase } from '../../util/config';
 import { ProfileSummaryDTO } from 'src/app/dto/profileSummaryDTO';
 import { ProfileDTO } from 'src/app/dto/profileDTO';
 
@@ -10,7 +10,7 @@ import { ProfileDTO } from 'src/app/dto/profileDTO';
   providedIn: 'root'
 })
 export class ProfileService {
-  profileBase = base + '/profile';
+  profileBase = backendBase + '/profile';
 
   constructor(private http: HttpClient) { }
 

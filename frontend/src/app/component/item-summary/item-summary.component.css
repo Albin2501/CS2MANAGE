@@ -21,8 +21,38 @@
 
 .item:hover {
     background-color: rgb(75, 80, 100);
-    transform: scale(1.025);
-    box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.5);
+    transform: scale(1.005);
+    box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.25);
+}
+
+.item:hover>.price>.priceEmphasis {
+    font-weight: bold;
+    animation-name: priceAnimation;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    border-radius: 4rem;
+}
+
+@keyframes priceAnimation {
+    10% {
+        background: rgba(255, 140, 10, 0);
+        box-shadow: 0 0 0 0px rgba(255, 140, 10, 0);
+    }
+
+    50% {
+        background: rgba(255, 140, 10, 0.3);
+        box-shadow: 0 0 0 7.5px rgba(255, 140, 10, 0.3);
+    }
+
+    90% {
+        background: rgba(255, 140, 10, 0);
+        box-shadow: 0 0 0 15px rgba(255, 140, 10, 0);
+    }
+}
+
+.item:hover>.date {
+    opacity: 100%;
 }
 
 .image {
@@ -85,6 +115,7 @@
     justify-self: last baseline;
     padding: 0.5rem;
     font-size: 0.75rem;
+    opacity: 0%;
 }
 
 .itemSummaryContainer {

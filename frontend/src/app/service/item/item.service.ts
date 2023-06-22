@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
-import { base } from '../../util/config';
+import { backendBase } from '../../util/config';
 import { ItemSummaryDTO } from 'src/app/dto/itemSummaryDTO';
 import { ItemDTO } from 'src/app/dto/itemDTO';
 
@@ -10,7 +10,7 @@ import { ItemDTO } from 'src/app/dto/itemDTO';
   providedIn: 'root'
 })
 export class ItemService {
-  itemBase = base + '/item';
+  itemBase = backendBase + '/item';
 
   constructor(private http: HttpClient) { }
 

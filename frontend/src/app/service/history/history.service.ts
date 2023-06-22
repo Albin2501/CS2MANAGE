@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
-import { base } from '../../util/config';
+import { backendBase } from '../../util/config';
 import { HistoryEntryDTO } from 'src/app/dto/historyEntryDTO';
 
 
@@ -10,7 +10,7 @@ import { HistoryEntryDTO } from 'src/app/dto/historyEntryDTO';
   providedIn: 'root'
 })
 export class HistoryService {
-  historyBase = base + '/history';
+  historyBase = backendBase + '/history';
 
   constructor(private http: HttpClient) { }
 

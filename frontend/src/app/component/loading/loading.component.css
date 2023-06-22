@@ -1,0 +1,136 @@
+.container {
+    --letterWidth: 29.39px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 0 0 0 -44.085px;
+    font-family: monospace;
+    letter-spacing: 3px;
+    overflow: hidden;
+    opacity: 0%;
+    animation-name: fadeIn;
+    animation-duration: 1s;
+    animation-delay: 1s;
+    animation-fill-mode: forwards;
+}
+
+span {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.numberTwo {
+    position: relative;
+    animation-name: numberTwoAnimation;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    color: rgb(255, 140, 10);
+    animation-delay: 2s;
+}
+
+.letterS {
+    position: relative;
+    animation-name: letterSAnimation;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    animation-delay: 2s;
+}
+
+.letterC {
+    animation-name: anime;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0%;
+    }
+
+    100% {
+        opacity: 100%;
+    }
+}
+
+@keyframes letterSAnimation {
+    0% {
+        color: rgb(255, 255, 255);
+        top: 0px;
+        left: 0px;
+    }
+
+    25% {
+        color: rgb(255, 255, 255);
+        top: 0px;
+        left: 29.39px;
+    }
+
+    50% {
+        color: rgb(255, 140, 10);
+        top: 0px;
+        left: 29.39px;
+        opacity: 100%;
+    }
+
+    60% {
+        color: rgb(255, 255, 255);
+        top: 0px;
+        left: 29.39px;
+        opacity: 0%;
+
+    }
+
+    75% {
+        top: 0px;
+        left: 0px;
+        opacity: 0%;
+    }
+
+    100% {
+        opacity: 100%;
+        color: rgb(255, 255, 255);
+        top: 0px;
+        left: 0px;
+    }
+}
+
+@keyframes numberTwoAnimation {
+    0% {
+        color: rgb(255, 140, 10);
+        top: 0px;
+        left: 0px;
+        opacity: 100%;
+    }
+
+    10% {
+        color: rgb(255, 255, 255);
+        top: 0px;
+        left: 0px;
+        opacity: 0%;
+    }
+
+    25% {
+        top: 0px;
+        left: -29.39px;
+        opacity: 0%;
+    }
+
+    50% {
+        opacity: 100%;
+        color: rgb(255, 255, 255);
+        top: 0px;
+        left: -29.39px;
+    }
+
+    75% {
+        color: rgb(255, 255, 255);
+        top: 0px;
+        left: 0px;
+    }
+
+    100% {
+        color: rgb(255, 140, 10);
+        top: 0px;
+        left: 0px;
+    }
+}

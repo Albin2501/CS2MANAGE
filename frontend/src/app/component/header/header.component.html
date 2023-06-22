@@ -1,9 +1,11 @@
 <div class='header'>
-    <div *ngFor='let item of menuItems; let i = index' class='menuItem' (click)='makeActive(i)'
+    <div *ngFor='let item of menuItems' class='menuItem'
         [ngClass]="{'active': item.active, 'inactive': !item.active, 'logo': item.name == 'CS2MANAGE'}">
-        <a *ngIf="item.name != 'CS2MANAGE'; else logo" [routerLink]='item.link'>{{item.name}}</a>
+        <a (click)='getActiveTab()' *ngIf="item.name != 'CS2MANAGE'; else logo"
+            [routerLink]='item.link'>{{item.name}}</a>
         <ng-template #logo>
-            <a [routerLink]='item.link'>{{item.name.substring(0,2)}}<span class='letter'>{{item.name.substring(2,
+            <a (click)='getActiveTab()' [routerLink]='item.link'>{{item.name.substring(0,2)}}<span
+                    class='letter'>{{item.name.substring(2,
                     3)}}</span>{{item.name.substring(3)}}</a>
         </ng-template>
     </div>

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { frontendBase } from '../../util/config';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -11,7 +13,7 @@ export class HeaderComponent implements OnInit {
     {
       name: 'CS2MANAGE',
       link: '/',
-      active: true
+      active: false
     },
     {
       name: 'ITEMS',
@@ -22,17 +24,37 @@ export class HeaderComponent implements OnInit {
       name: 'HISTORY',
       link: '/history',
       active: false
+    },
+    {
+      name: 'LOADING',
+      link: '/loading',
+      active: false
     }
   ];
 
   constructor() { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.getActiveTab();
+  }
 
-  makeActive(index: number) {
-    for (let i = 0; i < this.menuItems.length; i++) {
-      if (i == index) this.menuItems[i].active = true;
-      else this.menuItems[i].active = false;
-    }
+  getActiveTab(): void {
+    // TODO: This is a work-around. Fix this.
+    setTimeout(() => {
+      const currentURL = window.location.href;
+      const currentLink = currentURL.replace(frontendBase, '');
+      let existsActive;
+
+      for (let i = 0; i < this.menuItems.length; i++) {
+        if (currentLink == this.menuItems[i].link) this.menuItems[i].active = true;
+        else this.menuItems[i].active = false;
+      }
+
+      for (let i = 0; i < this.menuItems.length; i++) {
+        if (this.menuItems[i].active) existsActive = true;
+      }
+
+      if (!existsActive) this.menuItems[0].active = true;
+    }, 0);
   }
 }

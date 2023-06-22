@@ -10,7 +10,7 @@
             </div>
         </ng-template>
         <div class='price totalProfitSP'>
-            <a *ngIf='item.totalProfitSP; else noSP'
+            <a *ngIf='item.totalProfitSP; else noSP' class='priceEmphasis'
                 [ngClass]="{'pos': item.totalProfitSP >= 0, 'neg' : item.totalProfitSP < 0 }" href='{{item.linkSP}}'
                 target="_blank">{{formatPrice(item.totalProfitSP, false)}}</a>
             <ng-template #noSP>
@@ -18,7 +18,7 @@
             </ng-template>
         </div>
         <div class='price totalProfitSCM'>
-            <a *ngIf='item.totalProfitSCM; else noSCM'
+            <a *ngIf='item.totalProfitSCM; else noSCM' class='priceEmphasis'
                 [ngClass]="{'pos': item.totalProfitSCM >= 0, 'neg' : item.totalProfitSCM < 0 }" href='{{item.linkSCM}}'
                 target="_blank">{{formatPrice(item.totalProfitSCM, false)}}</a>
             <ng-template #noSCM>
@@ -29,7 +29,7 @@
     </div>
 </div>
 
-<div class='itemSummaryContainer' *ngIf='itemSummary.items && itemSummary.items.length > 0'>
+<div class='itemSummaryContainer' *ngIf='itemSummary.items && itemSummary.items.length > 0; else loading'>
     <div class="itemSummary">
         <div class='text amountSummaryText'>Amount</div>
         <div class='summary amountSummary'>{{itemSummary.amount}}</div>
@@ -43,3 +43,7 @@
             class='summary totalProfitSCM'>{{formatPrice(itemSummary.totalProfitSCM, false)}}</div>
     </div>
 </div>
+
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>
