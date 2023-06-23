@@ -4,63 +4,39 @@ const historyType = require('../util/historyEntry');
 const itemDatabase = require('../persistence/itemDatabase');
 const cache = require('../persistence/cache');
 
-const binarySearch = require('../util/binarySearch');
-
 // ------------------------------- EXPORTED FUNCTIONS -------------------------------
 
 /**
- * Retrieves all items from itemDatabase.json and caches them with SCM/SP prices
- * If cache is not up-to-date then new SCM/SP prices will be retrieved
- * If cache is dirty (inconsistent) then it will be adjusted to match itemDatabase.json // TODO
+ * Retrieves all items from itemDatabase.json and caches them with SCM/SP prices.
+ * Items are being filtered according to the given query parameters.
+ * If cache is not up-to-date or dirty (inconsistent) then new SCM/SP prices will be retrieved.
+ * @param  {Object} query   Given query parameters
  * @return {Object}         Cache containing metadata and items
  */
-async function getAllItems() {
+async function getAllItems(query) {
     if (!cache.upToDate() || cache.dirty()) {
-        console.log("Cache is not up-to-date. New API-requests will be made.");
+        console.log('Cache is not up-to-date. New API-requests will be made.');
 
-        const allItems = itemDatabase.get().items;
-        let toBeCached = [];
-        let possiblePriceSCM;
-        let priceSCM;
-        let possibleItemSP;
-        let priceSP;
-        let priceSPEverything = await getPriceSPEverything();
-
-        // calculated price are median_price (SCM) and suggested_price (SP)
-        for (let i = 0; i < allItems.length; i++) {
-            possiblePriceSCM = await getPriceSCM(allItems[i].name);
-
-            // TODO: This is a work-around. Fix this to be in O(n * log(m)).
-            if (allItems[i].name.includes('★')) {
-                filteredArray = priceSPEverything.filter(item => allItems[i].name.localeCompare(item.market_hash_name) == 0);
-                possibleItemSP = filteredArray.length > 0 ? filteredArray[0] : null;
-            } else possibleItemSP = binarySearch.searchItemSP(allItems[i].name, priceSPEverything);
-
-            if (possiblePriceSCM && possiblePriceSCM.success) {
-                priceSCM = possiblePriceSCM.median_price ? getNumberFromSCMString(possiblePriceSCM.median_price) : getNumberFromSCMString(possiblePriceSCM.lowest_price);
-                linkSCM = "https://steamcommunity.com/market/listings/730/" + allItems[i].name;
-            } else {
-                console.log(`The item ${allItems[i].name} could not be fetched from SCM.`);
-                priceSCM = null;
-                linkSCM = null;
-            }
-
-            if (possibleItemSP) {
-                priceSP = possibleItemSP.suggested_price;
-                linkSP = possibleItemSP.market_page + getQueryParams(allItems[i].name);
-            } else {
-                console.log(`The item ${allItems[i].name} could not be fetched from SP.`);
-                priceSP = null;
-                linkSP = null;
-            }
-
-            toBeCached.push(itemMapper.itemToItemDTO(allItems[i], priceSCM, priceSP, linkSCM, linkSP));
-        }
-
+        const toBeCached = await getToBeCachedItems();
         cache.set(toBeCached);
     }
 
-    return cache.get();
+    query = query ? query : {};
+    const order = query.order ? query.order : '';
+    const sort = query.sort ? query.sort : '';
+    const name = query.name ? query.name : '';
+    let s1 = order == 'desc' ? -1 : 1;
+    let s2 = order == 'desc' ? 1 : -1;
+
+    const toBeFilteredCache = cache.get();
+    let items = toBeFilteredCache.items;
+
+    items = items.filter(item => item.name.includes(name));
+    if (sort == 'date' || sort == 'name') items = items.sort((a, b) => { return a[sort] < b[sort] ? s2 : s1 });
+    else items = items.sort((a, b) => { return s1 * a[sort] + s2 * b[sort] });
+    toBeFilteredCache.items = items;
+
+    return toBeFilteredCache;
 }
 
 /**
@@ -108,6 +84,42 @@ const jsdom = require("jsdom");
 const steamImageURI = 'https://steamcommunity.com/market/listings/730/';
 const steamSCMURI = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=3&market_hash_name=';
 const skinportURI = 'https://api.skinport.com/v1/items';
+
+async function getToBeCachedItems() {
+    const allItems = itemDatabase.get().items;
+    let toBeCached = [];
+    let possiblePriceSCM, priceSCM, possibleItemSP, priceSP;
+    let priceSPEverything = await getPriceSPEverything();
+
+    // calculated price are median_price (SCM) and suggested_price (SP)
+    for (let i = 0; i < allItems.length; i++) {
+        possiblePriceSCM = await getPriceSCM(allItems[i].name);
+
+        filteredArray = priceSPEverything.filter(item => allItems[i].name.localeCompare(item.market_hash_name) == 0);
+        possibleItemSP = filteredArray.length > 0 ? filteredArray[0] : null;
+
+        if (possiblePriceSCM && possiblePriceSCM.success) {
+            priceSCM = possiblePriceSCM.median_price ? getNumberFromSCMString(possiblePriceSCM.median_price) : getNumberFromSCMString(possiblePriceSCM.lowest_price);
+            linkSCM = 'https://steamcommunity.com/market/listings/730/' + allItems[i].name;
+        } else {
+            console.log(`The item ${allItems[i].name} could not be fetched from SCM.`);
+            priceSCM = null;
+            linkSCM = null;
+        }
+
+        if (possibleItemSP) {
+            priceSP = possibleItemSP.suggested_price;
+            linkSP = possibleItemSP.market_page + getQueryParams(allItems[i].name);
+        } else {
+            console.log(`The item ${allItems[i].name} could not be fetched from SP.`);
+            priceSP = null;
+            linkSP = null;
+        }
+
+        toBeCached.push(itemMapper.itemToItemDTO(allItems[i], priceSCM, priceSP, linkSCM, linkSP));
+    }
+    return toBeCached;
+}
 
 async function getPriceSCM(name) {
     try {

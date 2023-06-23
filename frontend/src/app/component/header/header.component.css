@@ -1,7 +1,7 @@
 .header {
     padding: 1rem 0 1rem 1rem;
     transition: 2s;
-    background: linear-gradient(90deg, rgb(96, 96, 96) 0%, rgba(3, 0, 10) 5%);
+    background: linear-gradient(90deg, rgb(96, 96, 96) 1%, var(--cs2DarkBlue) 4%);
 }
 
 .header * {
@@ -19,22 +19,22 @@
 
 .active a {
     transition: 0.25s;
-    color: rgb(255, 140, 10);
+    color: var(--cs2Orange);
 }
 
 .inactive a {
     transition: 0.25s;
-    color: rgb(255, 255, 255);
+    color: var(--cs2White);
 }
 
 .active a span {
     font-weight: bold;
     transition: 0.25s;
-    color: rgb(255, 255, 255);
+    color: var(--cs2White);
 }
 
 .inactive a span {
     font-weight: bold;
     transition: 0.25s;
-    color: rgb(255, 140, 10);
+    color: var(--cs2Orange);
 }

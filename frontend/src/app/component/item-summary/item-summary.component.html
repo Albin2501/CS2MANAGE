@@ -1,49 +1,64 @@
-<div class='items' *ngIf='itemSummary.items && itemSummary.items.length > 0'>
-    <div class='item' *ngFor='let item of itemSummary.items'>
-        <img class='image' src='{{item.image}}' alt='Image of {{item.name}}'>
-        <div class='name'>{{item.name}}</div>
-        <div class='price totalPrice' *ngIf='item.amount < 2; else withAmount'>{{formatPrice(item.totalPrice, true)}}
-        </div>
-        <ng-template #withAmount>
-            <div class='price totalPrice'>{{formatPrice(item.totalPrice, true)}}
-                <div class='amount'>({{item.amount}} / {{formatPrice(item.price, true)}})</div>
+<app-loading *ngIf='!itemSummary.items || itemSummary.items.length == 0; else display' />
+
+<ng-template #display>
+    <div class='optionsContainer'>
+        <div class='options'>
+            <div *ngFor='let sort of sorts' class='option sort'
+                [ngClass]="{'active': sort.active, 'inactive': !sort.active}"
+                (click)='setQueryParams("sort", sort.value)'>
+                {{sort.name}}</div>
+            <div class='option divider'>|</div>
+            <div *ngFor='let order of orders' class='option order'
+                [ngClass]="{'active': order.active, 'inactive': !order.active}">
+                <div (click)='setQueryParams("order", order.value)'>{{order.name}}</div>
             </div>
-        </ng-template>
-        <div class='price totalProfitSP'>
-            <a *ngIf='item.totalProfitSP; else noSP' class='priceEmphasis'
-                [ngClass]="{'pos': item.totalProfitSP >= 0, 'neg' : item.totalProfitSP < 0 }" href='{{item.linkSP}}'
-                target="_blank">{{formatPrice(item.totalProfitSP, false)}}</a>
-            <ng-template #noSP>
-                <div class='price'>error</div>
-            </ng-template>
         </div>
-        <div class='price totalProfitSCM'>
-            <a *ngIf='item.totalProfitSCM; else noSCM' class='priceEmphasis'
-                [ngClass]="{'pos': item.totalProfitSCM >= 0, 'neg' : item.totalProfitSCM < 0 }" href='{{item.linkSCM}}'
-                target="_blank">{{formatPrice(item.totalProfitSCM, false)}}</a>
-            <ng-template #noSCM>
-                <div class='price'>unknown</div>
+    </div>
+
+    <div class='items'>
+        <div class='item' *ngFor='let item of itemSummary.items'>
+            <img class='image' src='{{item.image}}' alt='Image of {{item.name}}'>
+            <div class='name'>{{item.name}}</div>
+            <div class='price totalPrice' *ngIf='item.amount < 2; else withAmount'>{{formatPrice(item.totalPrice,
+                true)}}
+            </div>
+            <ng-template #withAmount>
+                <div class='price totalPrice'>{{formatPrice(item.totalPrice, true)}}
+                    <div class='amount'>({{formatPrice(item.price, true)}} / {{item.amount}})</div>
+                </div>
             </ng-template>
+            <div class='price totalProfitSP'>
+                <a *ngIf='item.totalProfitSP; else noSP' class='priceEmphasis'
+                    [ngClass]="{'pos': item.totalProfitSP >= 0, 'neg' : item.totalProfitSP < 0 }" href='{{item.linkSP}}'
+                    target="_blank">{{formatPrice(item.totalProfitSP, false)}}</a>
+                <ng-template #noSP>
+                    <div class='price'>error</div>
+                </ng-template>
+            </div>
+            <div class='price totalProfitSCM'>
+                <a *ngIf='item.totalProfitSCM; else noSCM' class='priceEmphasis'
+                    [ngClass]="{'pos': item.totalProfitSCM >= 0, 'neg' : item.totalProfitSCM < 0 }"
+                    href='{{item.linkSCM}}' target="_blank">{{formatPrice(item.totalProfitSCM, false)}}</a>
+                <ng-template #noSCM>
+                    <div class='price'>unknown</div>
+                </ng-template>
+            </div>
+            <div class='date'>{{formatDate(item.date)}}</div>
         </div>
-        <div class='date'>{{formatDate(item.date)}}</div>
     </div>
-</div>
 
-<div class='itemSummaryContainer' *ngIf='itemSummary.items && itemSummary.items.length > 0; else loading'>
-    <div class="itemSummary">
-        <div class='text amountSummaryText'>Amount</div>
-        <div class='summary amountSummary'>{{itemSummary.amount}}</div>
-        <div class='text totalPriceSummaryText'>Spend</div>
-        <div class='summary totalPriceSummary'>{{formatPrice(itemSummary.totalPrice, true)}}</div>
-        <div class='text totalProfitSPText'>Profit</div>
-        <div [ngClass]="{'pos': itemSummary.totalProfitSP >= 0, 'neg' : itemSummary.totalProfitSP < 0 }"
-            class='summary totalProfitSP'>{{formatPrice(itemSummary.totalProfitSP, false)}}</div>
-        <div class='text totalProfitSCMText'>Profit</div>
-        <div [ngClass]="{'pos': itemSummary.totalProfitSCM >= 0, 'neg' : itemSummary.totalProfitSCM< 0 }"
-            class='summary totalProfitSCM'>{{formatPrice(itemSummary.totalProfitSCM, false)}}</div>
+    <div class='itemSummaryContainer'>
+        <div class="itemSummary">
+            <div class='text amountSummaryText'>Amount</div>
+            <div class='summary amountSummary'>{{itemSummary.amount}}</div>
+            <div class='text totalPriceSummaryText'>Spend</div>
+            <div class='summary totalPriceSummary'>{{formatPrice(itemSummary.totalPrice, true)}}</div>
+            <div class='text totalProfitSPText'>Profit</div>
+            <div [ngClass]="{'pos': itemSummary.totalProfitSP >= 0, 'neg' : itemSummary.totalProfitSP < 0 }"
+                class='summary totalProfitSP'>{{formatPrice(itemSummary.totalProfitSP, false)}}</div>
+            <div class='text totalProfitSCMText'>Profit</div>
+            <div [ngClass]="{'pos': itemSummary.totalProfitSCM >= 0, 'neg' : itemSummary.totalProfitSCM< 0 }"
+                class='summary totalProfitSCM'>{{formatPrice(itemSummary.totalProfitSCM, false)}}</div>
+        </div>
     </div>
-</div>
-
-<ng-template #loading>
-    <app-loading></app-loading>
 </ng-template>

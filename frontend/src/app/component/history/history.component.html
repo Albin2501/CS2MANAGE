@@ -1,4 +1,4 @@
-<div class='history'>
+<div class='history' *ngIf='history && history.length > 0; else loading'>
     <div class='historyEntryContainer' *ngFor='let historyEntry of history'>
         <div class='historyEntry {{historyEntry.type}}'>
             <div class='contents'>{{historyEntry.contents}}</div>
@@ -7,3 +7,7 @@
         </div>
     </div>
 </div>
+
+<ng-template #loading>
+    <app-loading />
+</ng-template>

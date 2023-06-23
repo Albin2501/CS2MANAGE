@@ -24,7 +24,7 @@ app.use(function (req, res, next) {
 const itemBase = '/item';
 
 app.get(itemBase + '/get', async function (req, res) {
-    res.send(await itemService.getAllItems());
+    res.send(await itemService.getAllItems(req.query));
 });
 
 app.post(itemBase + '/post', jsonParser, async function (req, res) {

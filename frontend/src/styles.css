@@ -3,6 +3,12 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     color: rgb(255, 254, 254);
     background: rgb(42, 42, 50);
+
+    --cs2Orange: rgb(255, 140, 10);
+    --cs2White: rgb(255, 255, 255);
+    --cs2DarkBlue: rgb(3, 0, 10);
+    --cs2LightBlue: rgb(65, 70, 90);
+    --cs2LightBlueOnHover: rgb(75, 80, 100);
 }
 
 a {

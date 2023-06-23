@@ -1,5 +1,6 @@
 .container {
     --letterWidth: 29.39px;
+
     position: absolute;
     top: 50%;
     left: 50%;
@@ -14,7 +15,8 @@
     animation-fill-mode: forwards;
 }
 
-span {
+div {
+    display: inline-block;
     font-size: 3rem;
     font-weight: bold;
 }
@@ -24,7 +26,7 @@ span {
     animation-name: numberTwoAnimation;
     animation-duration: 4s;
     animation-iteration-count: infinite;
-    color: rgb(255, 140, 10);
+    color: var(--cs2Orange);
     animation-delay: 2s;
 }
 
@@ -54,33 +56,37 @@ span {
 
 @keyframes letterSAnimation {
     0% {
-        color: rgb(255, 255, 255);
+        color: var(--cs2White);
         top: 0px;
         left: 0px;
     }
 
     25% {
-        color: rgb(255, 255, 255);
+        color: var(--cs2White);
         top: 0px;
         left: 29.39px;
+        transform: scaleX(-1);
     }
 
     50% {
-        color: rgb(255, 140, 10);
+        color: var(--cs2Orange);
         top: 0px;
         left: 29.39px;
         opacity: 100%;
+        transform: scaleX(-1);
     }
 
     60% {
-        color: rgb(255, 255, 255);
+        color: var(--cs2White);
         top: 0px;
         left: 29.39px;
         opacity: 0%;
+        transform: scaleX(-1);
 
     }
 
     75% {
+        transform: scaleX(1);
         top: 0px;
         left: 0px;
         opacity: 0%;
@@ -88,7 +94,7 @@ span {
 
     100% {
         opacity: 100%;
-        color: rgb(255, 255, 255);
+        color: var(--cs2White);
         top: 0px;
         left: 0px;
     }
@@ -96,40 +102,44 @@ span {
 
 @keyframes numberTwoAnimation {
     0% {
-        color: rgb(255, 140, 10);
+        color: var(--cs2Orange);
         top: 0px;
         left: 0px;
         opacity: 100%;
     }
 
     10% {
-        color: rgb(255, 255, 255);
+        color: var(--cs2White);
         top: 0px;
         left: 0px;
         opacity: 0%;
+        transform: scaleX(1);
     }
 
     25% {
         top: 0px;
         left: -29.39px;
         opacity: 0%;
+        transform: scaleX(-1);
     }
 
     50% {
+        transform: scaleX(-1);
         opacity: 100%;
-        color: rgb(255, 255, 255);
+        color: var(--cs2White);
         top: 0px;
         left: -29.39px;
     }
 
     75% {
-        color: rgb(255, 255, 255);
+        transform: scaleX(1);
+        color: var(--cs2White);
         top: 0px;
         left: 0px;
     }
 
     100% {
-        color: rgb(255, 140, 10);
+        color: var(--cs2Orange);
         top: 0px;
         left: 0px;
     }

@@ -48,9 +48,6 @@ export class HeaderComponent implements OnInit {
       for (let i = 0; i < this.menuItems.length; i++) {
         if (currentLink == this.menuItems[i].link) this.menuItems[i].active = true;
         else this.menuItems[i].active = false;
-      }
-
-      for (let i = 0; i < this.menuItems.length; i++) {
         if (this.menuItems[i].active) existsActive = true;
       }
 
