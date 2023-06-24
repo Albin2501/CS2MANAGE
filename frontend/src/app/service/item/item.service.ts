@@ -19,15 +19,19 @@ export class ItemService {
     const sortString = 'sort';
     const orderString = 'order';
     const nameString = 'name';
-    let sort = 'date';
-    let order = 'desc';
-    let name = '';
+    let sort, order, name;
 
     this.route.queryParams.subscribe(params => {
-      sort = params[sortString] ? params[sortString] : sort;
-      order = params[orderString] ? params[orderString] : order;
-      name = params[nameString] ? params[nameString] : name;
+      sort = params[sortString];
+      order = params[orderString];
+      name = params[nameString];
     });
+
+    if (!(sort || order || name)) return this.http.get<ItemSummaryDTO>(this.itemBase + '/get');
+
+    sort = sort ? sort : 'date';
+    order = order ? order : 'desc';
+    name = name ? name : '';
 
     const options = { params: new HttpParams().set(sortString, sort).set(orderString, order).set(nameString, name) };
     return this.http.get<ItemSummaryDTO>(this.itemBase + '/get', options);

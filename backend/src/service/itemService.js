@@ -21,22 +21,33 @@ async function getAllItems(query) {
         cache.set(toBeCached);
     }
 
-    query = query ? query : {};
-    const order = query.order ? query.order : '';
-    const sort = query.sort ? query.sort : '';
-    const name = query.name ? query.name : '';
-    let s1 = order == 'desc' ? -1 : 1;
-    let s2 = order == 'desc' ? 1 : -1;
+    if (query && (query.order || query.sort || query.name)) {
+        const order = query.order ? query.order : '';
+        const sort = query.sort ? query.sort : '';
+        const name = query.name ? query.name.toLowerCase() : '';
+        let s1 = order == 'desc' ? -1 : 1;
+        let s2 = order == 'desc' ? 1 : -1;
 
-    const toBeFilteredCache = cache.get();
-    let items = toBeFilteredCache.items;
+        const toBeFilteredCache = cache.get();
+        let items = toBeFilteredCache.items;
 
-    items = items.filter(item => item.name.includes(name));
-    if (sort == 'date' || sort == 'name') items = items.sort((a, b) => { return a[sort] < b[sort] ? s2 : s1 });
-    else items = items.sort((a, b) => { return s1 * a[sort] + s2 * b[sort] });
-    toBeFilteredCache.items = items;
+        items = items.filter(item => item.name.toLowerCase().includes(name)); // this filters unfit items
+        if (sort == 'date' || sort == 'name') items = items.sort((a, b) => { return a[sort] < b[sort] ? s2 : s1 });
+        else items = items.sort((a, b) => { return s1 * a[sort] + s2 * b[sort] });
+        // because the item list could be reduced, the calculations need to be redone
+        const calculate = cache.calculate(items);
 
-    return toBeFilteredCache;
+        toBeFilteredCache.amount = calculate.amount;
+        toBeFilteredCache.totalPrice = calculate.totalPrice;
+        toBeFilteredCache.totalProfitSCM = calculate.totalProfitSCM;
+        toBeFilteredCache.totalProfitSP = calculate.totalProfitSP;
+        toBeFilteredCache.items = items;
+
+        return toBeFilteredCache;
+    }
+
+    // default: date, descending
+    return cache.get();
 }
 
 /**
@@ -123,7 +134,7 @@ async function getToBeCachedItems() {
 
 async function getPriceSCM(name) {
     try {
-        return await (await fetch(encodeURI(steamSCMURI + name))).json(); // TODO
+        return await (await fetch(encodeURI(steamSCMURI + name))).json();
     } catch (err) {
         console.log(err);
     }

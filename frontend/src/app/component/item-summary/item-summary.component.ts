@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { ItemSummaryDTO } from 'src/app/dto/itemSummaryDTO';
@@ -31,12 +30,12 @@ export class ItemSummaryComponent implements OnInit {
       active: false
     },
     {
-      name: 'PROFIT (SP)',
+      name: 'SKINPORT',
       value: 'totalProfitSP',
       active: false
     },
     {
-      name: 'PROFIT (SCM)',
+      name: 'STEAM',
       value: 'totalProfitSCM',
       active: false
     }
@@ -59,7 +58,6 @@ export class ItemSummaryComponent implements OnInit {
 
   ngOnInit(): void {
     this.get();
-    this.getActive();
   }
 
   get(): void {
@@ -86,16 +84,21 @@ export class ItemSummaryComponent implements OnInit {
 
   setQueryParams(param: string, value: string): void {
     const queryParams = {} as Params;
-    let sort, order;
+    const sortString = 'sort';
+    const orderString = 'order';
+    const nameString = 'name';
+    let sort, order, name;
 
     this.route.queryParams.subscribe(params => {
-      sort = params['sort'];
-      order = params['order'];
+      sort = params[sortString];
+      order = params[orderString];
+      name = params[nameString];
     });
 
-    if (sort) queryParams['sort'] = sort;
-    if (order) queryParams['order'] = order;
-    queryParams[param] = value;
+    if (sort) queryParams[sortString] = sort;
+    if (order) queryParams[orderString] = order;
+    if (name) queryParams[nameString] = name;
+    queryParams[param] = value != '' ? value : undefined;
 
     this.router.navigate([], {
       relativeTo: this.route,

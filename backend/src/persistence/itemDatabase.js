@@ -19,7 +19,7 @@ function set(item) {
     // if id already exists, throw error
     if (binarySearch.searchId(item.id, itemDatabase.items)) throw new Error('Id of item must be unique.');
 
-    itemDatabase.items.push(item);
+    itemDatabase.items.unshift(item);
     itemDatabase.id++;
     writeToFile(itemDatabase);
 }

@@ -1,20 +1,27 @@
+<!-- TODO: Rework HTML and CSS -->
+
+<div class='optionsContainer'>
+    <div class='options'>
+        <div class='searchContainer'>
+            <input class='searchInput' type='search' placeholder='Search'
+                (keypress)='$event.key == "Enter" ? setQueryParams("name", search.value) : {};' #search>
+            <button class=' searchButton' type='button' (click)='setQueryParams("name", search.value)'>🔍</button>
+        </div>
+        <div *ngFor=' let sort of sorts' class='option sort'
+            [ngClass]="{'active': sort.active, 'inactive': !sort.active}" (click)='setQueryParams("sort", sort.value)'>
+            {{sort.name}}
+        </div>
+        <div class='option divider'>|</div>
+        <div *ngFor='let order of orders' class='option order'
+            [ngClass]="{'active': order.active, 'inactive': !order.active}">
+            <div (click)='setQueryParams("order", order.value)'>{{order.name}}</div>
+        </div>
+    </div>
+</div>
+
 <app-loading *ngIf='!itemSummary.items || itemSummary.items.length == 0; else display' />
 
 <ng-template #display>
-    <div class='optionsContainer'>
-        <div class='options'>
-            <div *ngFor='let sort of sorts' class='option sort'
-                [ngClass]="{'active': sort.active, 'inactive': !sort.active}"
-                (click)='setQueryParams("sort", sort.value)'>
-                {{sort.name}}</div>
-            <div class='option divider'>|</div>
-            <div *ngFor='let order of orders' class='option order'
-                [ngClass]="{'active': order.active, 'inactive': !order.active}">
-                <div (click)='setQueryParams("order", order.value)'>{{order.name}}</div>
-            </div>
-        </div>
-    </div>
-
     <div class='items'>
         <div class='item' *ngFor='let item of itemSummary.items'>
             <img class='image' src='{{item.image}}' alt='Image of {{item.name}}'>

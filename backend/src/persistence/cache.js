@@ -14,34 +14,42 @@ function get() {
 }
 
 function set(items) {
-    let amount = 0;
-    let totalPrice = 0;
-    let totalProfitSCM = 0;
-    let totalProfitSP = 0;
-
-    for (let i = 0; i < items.length; i++) {
-        amount += items[i].amount;
-        totalPrice += items[i].totalPrice;
-        totalProfitSCM += items[i].totalProfitSCM;
-        totalProfitSP += items[i].totalProfitSP;
-    }
-
-    amount = +(amount.toFixed(2));
-    totalPrice = +(totalPrice.toFixed(2));
-    totalProfitSCM = +(totalProfitSCM.toFixed(2));
-    totalProfitSP = +(totalProfitSP.toFixed(2));
+    const caluclate = calculate(items);
 
     const cache = {
-        amount: amount,
+        amount: caluclate.amount,
         date: new Date(),
         dirty: false,
-        totalPrice: totalPrice,
-        totalProfitSCM: totalProfitSCM,
-        totalProfitSP: totalProfitSP,
+        totalPrice: caluclate.totalPrice,
+        totalProfitSCM: caluclate.totalProfitSCM,
+        totalProfitSP: caluclate.totalProfitSP,
         items: items
     };
 
     writeToFile(cache);
+}
+
+function calculate(items) {
+    const calculate = {
+        amount: 0,
+        totalPrice: 0,
+        totalProfitSCM: 0,
+        totalProfitSP: 0
+    };
+
+    for (let i = 0; i < items.length; i++) {
+        calculate.amount += items[i].amount;
+        calculate.totalPrice += items[i].totalPrice;
+        calculate.totalProfitSCM += items[i].totalProfitSCM;
+        calculate.totalProfitSP += items[i].totalProfitSP;
+    }
+
+    calculate.amount = +(calculate.amount.toFixed(2));
+    calculate.totalPrice = +(calculate.totalPrice.toFixed(2));
+    calculate.totalProfitSCM = +(calculate.totalProfitSCM.toFixed(2));
+    calculate.totalProfitSP = +(calculate.totalProfitSP.toFixed(2));
+
+    return calculate;
 }
 
 function upToDate() {
@@ -63,7 +71,7 @@ function setDirty() {
     writeToFile(cache);
 }
 
-module.exports = { get, set, upToDate, dirty, setDirty };
+module.exports = { get, set, calculate, upToDate, dirty, setDirty };
 
 // ------------------------------- HELPER FUNCTIONS -------------------------------
 
