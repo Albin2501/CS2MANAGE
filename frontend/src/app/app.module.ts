@@ -9,6 +9,7 @@ import { HistoryComponent } from './component/history/history.component';
 import { HeaderComponent } from './component/header/header.component';
 import { ItemManageComponent } from './component/item-manage/item-manage.component';
 import { LoadingComponent } from './component/loading/loading.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { LoadingComponent } from './component/loading/loading.component';
     LoadingComponent
   ],
   imports: [
+    ReactiveFormsModule,
     BrowserModule,
     HttpClientModule,
     AppRoutingModule

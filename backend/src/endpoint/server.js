@@ -46,6 +46,10 @@ app.delete(itemBase + '/deleteAll', async function (req, res) {
 const profileBase = '/profile';
 
 app.get(profileBase + '/get', async function (req, res) {
+    res.send(await profileService.getAllProfiles());
+});
+
+app.get(profileBase + '/getItems', async function (req, res) {
     res.send(await profileService.getAllItemsOfProfiles().catch(reason => console.log(reason)));
 });
 

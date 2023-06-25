@@ -14,8 +14,12 @@ export class ProfileService {
 
   constructor(private http: HttpClient) { }
 
-  get(): Observable<ProfileSummaryDTO> {
-    return this.http.get<ProfileSummaryDTO>(this.profileBase + '/get');
+  get(): Observable<ProfileDTO[]> {
+    return this.http.get<ProfileDTO[]>(this.profileBase + '/get');
+  }
+
+  getItems(): Observable<ProfileSummaryDTO> {
+    return this.http.get<ProfileSummaryDTO>(this.profileBase + '/getitems');
   }
 
   edit(profileDTO: ProfileDTO): Observable<void> {

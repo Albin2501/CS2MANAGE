@@ -1,0 +1,30 @@
+<div class='createContainer'>
+    <div class='create'>
+        <form [formGroup]='createForm'>
+
+            <label for='name'>Name:</label>
+            <input type='text' name='name' formControlName='name' required>
+
+            <label for='condition'>Condition:</label>
+            <select name='condition' formControlName='condition' required>
+                <option *ngFor='let condition of conditions' value='{{condition}}'>{{condition}}</option>
+            </select>
+
+            <label for='price'>Price:</label>
+            <input type='number' name='price' formControlName='price' required onkeypress='return (event.charCode == 0 || event.charCode == 8 || event.charCode == 13) ?
+            null : event.charCode >= 48 && event.charCode <= 57'>
+
+            <label for='amount'>Amount:</label>
+            <input type='number' name='amount' formControlName='amount' required onkeypress='return (event.charCode == 0 || event.charCode == 8 || event.charCode == 13) ?
+            null : event.charCode >= 48 && event.charCode <= 57'>
+
+            <label for='profile'>Profile:</label>
+            <select name='profile' formControlName='profileId' required>
+                <option *ngFor='let profile of profiles' value='{{profile.id}}'>{{profile.name}}</option>
+            </select>
+
+            <button (click)='post()' [disabled]='!createForm.valid'>ADD</button>
+            <button (click)='reset()'>CANCEL</button>
+        </form>
+    </div>
+</div>

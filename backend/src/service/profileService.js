@@ -6,9 +6,13 @@ const profileDatabase = require('../persistence/profileDatabase');
 
 // ------------------------------- EXPORTED FUNCTIONS -------------------------------
 
+function getAllProfiles() {
+    return profileDatabase.get();
+}
+
 async function getAllItemsOfProfiles() {
     const allItems = await itemService.getAllItems();
-    const profiles = profileDatabase.get();
+    const profiles = getAllProfiles();
     let profileId;
     let currentItem;
 
@@ -49,4 +53,4 @@ function editProfile(profileDTO) {
     if (profileChange) historyService.postHistoryEntry({ oldProfile: oldProfile, newProfile: newProfile }, historyType.type.EDIT_PROFILE);
 }
 
-module.exports = { getAllItemsOfProfiles, editProfile };
+module.exports = { getAllProfiles, getAllItemsOfProfiles, editProfile };

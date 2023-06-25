@@ -1,6 +1,6 @@
 export interface ItemDTO {
-    name: string,
-    price: number,
-    amount: number,
-    profileId: number
+    name: string | null | undefined,
+    price: number | null | undefined,
+    amount: number | null | undefined,
+    profileId: number | null | undefined
 }
