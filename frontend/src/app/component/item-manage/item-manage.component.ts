@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProfileDTO } from 'src/app/dto/profileDTO';
 import { ItemService } from 'src/app/service/item/item.service';
 import { ProfileService } from 'src/app/service/profile/profile.service';
+import { ToastifyService } from 'src/app/service/toastify/toastify.service';
 
 @Component({
   selector: 'app-item-manage',
@@ -23,7 +24,7 @@ export class ItemManageComponent implements OnInit {
   });
 
   constructor(private itemService: ItemService, private profileService: ProfileService,
-    private formBuilder: FormBuilder) { }
+    private formBuilder: FormBuilder, private toastifyService: ToastifyService) { }
 
   ngOnInit(): void {
     this.getProfiles();
@@ -35,10 +36,10 @@ export class ItemManageComponent implements OnInit {
         this.profiles = profiles;
       },
       error: error => {
-        console.log(error);
+        this.toastifyService.errorToast(error.error);
       },
       complete: () => {
-        this.createForm = this.initialForm();
+        this.reset();
       }
     });
   }
@@ -55,10 +56,13 @@ export class ItemManageComponent implements OnInit {
 
     this.itemService.post(itemDTO).subscribe({
       next: () => {
-        this.createForm.reset();
+        this.toastifyService.successToast(`Item '${this.createForm.value.name}' successfully added.`);
       },
       error: error => {
-        console.log(error);
+        this.toastifyService.errorToast(error.error);
+      },
+      complete: () => {
+        this.reset();
       }
     });
   }

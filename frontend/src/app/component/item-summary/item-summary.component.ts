@@ -3,6 +3,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { ItemSummaryDTO } from 'src/app/dto/itemSummaryDTO';
 import { ItemService } from 'src/app/service/item/item.service';
+import { ToastifyService } from 'src/app/service/toastify/toastify.service';
 import { formatDate, formatPrice } from 'src/app/util/formatter';
 
 @Component({
@@ -54,7 +55,7 @@ export class ItemSummaryComponent implements OnInit {
   ];
 
   constructor(private itemService: ItemService, private router: Router,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute, private toastifyService: ToastifyService) { }
 
   ngOnInit(): void {
     this.get();
@@ -66,7 +67,7 @@ export class ItemSummaryComponent implements OnInit {
         this.itemSummary = itemSummary;
       },
       error: error => {
-        console.log(error);
+        this.toastifyService.errorToast(error.error);
       },
       complete: () => {
         this.getActive();

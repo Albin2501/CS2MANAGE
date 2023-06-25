@@ -12,9 +12,9 @@ const historyService = require('../service/historyService');
 app.set('port', 2501);
 app.listen(2501);
 app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH");
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH');
     next();
 });
 
@@ -28,13 +28,21 @@ app.get(itemBase + '/get', async function (req, res) {
 });
 
 app.post(itemBase + '/post', jsonParser, async function (req, res) {
-    await itemService.postItem(req.body);
-    res.sendStatus(204);
+    try {
+        await itemService.postItem(req.body);
+        res.sendStatus(204);
+    } catch (err) {
+        res.status(400).send(err.message);
+    }
 });
 
 app.delete(itemBase + '/delete', async function (req, res) {
-    itemService.deleteItem(req.query.id);
-    res.sendStatus(204);
+    try {
+        itemService.deleteItem(req.query.id);
+        res.sendStatus(204);
+    } catch (err) {
+        res.status(404).send(err.message);
+    }
 });
 
 app.delete(itemBase + '/deleteAll', async function (req, res) {
@@ -54,8 +62,12 @@ app.get(profileBase + '/getItems', async function (req, res) {
 });
 
 app.patch(profileBase + '/edit', jsonParser, async function (req, res) {
-    profileService.editProfile(req.body);
-    res.sendStatus(204);
+    try {
+        profileService.editProfile(req.body);
+        res.sendStatus(204);
+    } catch (err) {
+        res.status(404).send(err.message);
+    }
 });
 
 // ------------------------------- HISTORY
@@ -66,8 +78,12 @@ app.get(historyBase + '/get', async function (req, res) {
 });
 
 app.delete(historyBase + '/delete', async function (req, res) {
-    historyService.deleteHistoryEntry(req.query.id);
-    res.sendStatus(204);
+    try {
+        historyService.deleteHistoryEntry(req.query.id);
+        res.sendStatus(204);
+    } catch (err) {
+        res.status(404).send(err.message);
+    }
 });
 
 app.delete(historyBase + '/deleteAll', async function (req, res) {

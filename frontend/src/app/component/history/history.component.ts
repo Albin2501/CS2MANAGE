@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { HistoryEntryDTO } from 'src/app/dto/historyEntryDTO';
 import { HistoryService } from 'src/app/service/history/history.service';
+import { ToastifyService } from 'src/app/service/toastify/toastify.service';
 
 import { formatDate } from 'src/app/util/formatter';
 
@@ -14,7 +15,7 @@ export class HistoryComponent implements OnInit {
 
   history: HistoryEntryDTO[] = [];
 
-  constructor(private historyService: HistoryService) { }
+  constructor(private historyService: HistoryService, private toastifyService: ToastifyService) { }
 
   ngOnInit(): void {
     this.get();
@@ -26,7 +27,7 @@ export class HistoryComponent implements OnInit {
         this.history = history;
       },
       error: error => {
-        console.log(error);
+        this.toastifyService.errorToast(error.error);
       }
     });
   }
@@ -34,7 +35,7 @@ export class HistoryComponent implements OnInit {
   delete(id: number): void {
     this.historyService.delete(id).subscribe({
       error: error => {
-        console.log(error);
+        this.toastifyService.errorToast(error.error);
       },
       complete: () => {
         this.get();
@@ -45,7 +46,7 @@ export class HistoryComponent implements OnInit {
   deleteAll(): void {
     this.historyService.deleteAll().subscribe({
       error: error => {
-        console.log(error);
+        this.toastifyService.errorToast(error.error);
       },
       complete: () => {
         this.get();

@@ -167,11 +167,11 @@
 }
 
 .pos {
-    color: rgb(65, 165, 65);
+    color: var(--cs2Green);
 }
 
 .neg {
-    color: rgb(230, 100, 100);
+    color: var(--cs2Red);
 }
 
 .date {

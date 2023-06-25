@@ -47,7 +47,7 @@
                     [ngClass]="{'pos': item.totalProfitSCM >= 0, 'neg' : item.totalProfitSCM < 0 }"
                     href='{{item.linkSCM}}' target="_blank">{{formatPrice(item.totalProfitSCM, false)}}</a>
                 <ng-template #noSCM>
-                    <div class='price'>unknown</div>
+                    <div class='price'>error</div>
                 </ng-template>
             </div>
             <div class='date'>{{formatDate(item.date)}}</div>

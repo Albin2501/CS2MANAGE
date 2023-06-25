@@ -52,7 +52,8 @@ async function getAllItems(query) {
 
 /**
  * Sends mapped object from frontend to the persistence layer so it can be saved. Before it gets persisted,
- * the image of the item will be fetched from steam to assure that the item exists. Only if the image exists,
+ * the image of the item will be fetched from steam to assure that the item exists.
+ * It does not garantee that the given condition of a skin exists. Only if the image exists,
  * the item will be persisted.
  * @param  {Object} itemDTO Object send from frontend
  */
@@ -60,10 +61,7 @@ async function postItem(itemDTO) {
     const noImage = 'https://community.cloudflare.steamstatic.com/economy/image//360fx360f';
     const image = await getImage(itemDTO.name);
 
-    if (image == noImage) {
-        console.log(`Item '${itemDTO.name}' does not exists.`);
-        return;
-    }
+    if (image == noImage) throw Error(`Item '${itemDTO.name}' does not exists.`);
 
     const item = itemMapper.itemDTOToItem(itemDTO, image);
 
@@ -109,7 +107,7 @@ async function getToBeCachedItems() {
         filteredArray = priceSPEverything.filter(item => allItems[i].name.localeCompare(item.market_hash_name) == 0);
         possibleItemSP = filteredArray.length > 0 ? filteredArray[0] : null;
 
-        if (possiblePriceSCM && possiblePriceSCM.success) {
+        if (possiblePriceSCM && possiblePriceSCM.success && (possiblePriceSCM.median_price || possiblePriceSCM.lowest_price)) {
             priceSCM = possiblePriceSCM.median_price ? getNumberFromSCMString(possiblePriceSCM.median_price) : getNumberFromSCMString(possiblePriceSCM.lowest_price);
             linkSCM = 'https://steamcommunity.com/market/listings/730/' + allItems[i].name;
         } else {

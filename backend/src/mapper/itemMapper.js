@@ -27,7 +27,7 @@ function itemDTOToItem(itemDTO, image) {
         name: itemDTO.name,
         image: image,
         date: new Date(),
-        price: itemDTO.price,
+        price: +(itemDTO.price).toFixed(2),
         amount: itemDTO.amount,
         totalPrice: itemDTO.price * itemDTO.amount,
         profileId: itemDTO.profileId
