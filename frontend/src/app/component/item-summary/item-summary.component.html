@@ -4,17 +4,13 @@
     <div class='options'>
         <div class='searchContainer'>
             <input class='searchInput' type='search' placeholder='Search'
-                (keypress)='$event.key == "Enter" ? setQueryParams("name", search.value) : {};' #search>
-            <button class=' searchButton' type='button' (click)='setQueryParams("name", search.value)'>🔍</button>
+                (keypress)='$event.key == "Enter" ? setObjects(true, search.value) : {};' #search>
+            <button class=' searchButton' type='button' (click)='setObjects(true, search.value)'>🔍</button>
         </div>
         <div *ngFor=' let sort of sorts' class='option sort'
-            [ngClass]="{'active': sort.active, 'inactive': !sort.active}" (click)='setQueryParams("sort", sort.value)'>
-            {{sort.name}}
-        </div>
-        <div class='option divider'>|</div>
-        <div *ngFor='let order of orders' class='option order'
-            [ngClass]="{'active': order.active, 'inactive': !order.active}">
-            <div (click)='setQueryParams("order", order.value)'>{{order.name}}</div>
+            [ngClass]="{'active': sort.active, 'inactive': !sort.active}" (click)='setObjects(false, sort.value)'>
+            {{sort.name}} <span
+                [ngClass]="{'activeOrder': sort.active, 'inactiveOrder': !sort.active}">{{getRepresentationOfOrder(sort.order)}}</span>
         </div>
     </div>
 </div>
@@ -39,7 +35,7 @@
                     [ngClass]="{'pos': item.totalProfitSP >= 0, 'neg' : item.totalProfitSP < 0 }" href='{{item.linkSP}}'
                     target="_blank">{{formatPrice(item.totalProfitSP, false)}}</a>
                 <ng-template #noSP>
-                    <div class='price'>error</div>
+                    <div class='price'>—</div>
                 </ng-template>
             </div>
             <div class='price totalProfitSCM'>
@@ -47,7 +43,7 @@
                     [ngClass]="{'pos': item.totalProfitSCM >= 0, 'neg' : item.totalProfitSCM < 0 }"
                     href='{{item.linkSCM}}' target="_blank">{{formatPrice(item.totalProfitSCM, false)}}</a>
                 <ng-template #noSCM>
-                    <div class='price'>error</div>
+                    <div class='price'>—</div>
                 </ng-template>
             </div>
             <div class='date'>{{formatDate(item.date)}}</div>

@@ -63,6 +63,14 @@
     color: var(--cs2White);
 }
 
+.activeOrder {
+    visibility: visible;
+}
+
+.inactiveOrder {
+    visibility: hidden;
+}
+
 .items {
     display: grid;
     align-items: center;

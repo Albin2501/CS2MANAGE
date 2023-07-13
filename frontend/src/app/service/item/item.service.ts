@@ -16,15 +16,12 @@ export class ItemService {
   constructor(private http: HttpClient, private route: ActivatedRoute) { }
 
   get(): Observable<ItemSummaryDTO> {
-    const sortString = 'sort';
-    const orderString = 'order';
-    const nameString = 'name';
     let sort, order, name;
 
     this.route.queryParams.subscribe(params => {
-      sort = params[sortString];
-      order = params[orderString];
-      name = params[nameString];
+      sort = params['sort'];
+      order = params['order'];
+      name = params['name'];
     });
 
     if (!(sort || order || name)) return this.http.get<ItemSummaryDTO>(this.itemBase + '/get');
@@ -33,7 +30,7 @@ export class ItemService {
     order = order ? order : 'desc';
     name = name ? name : '';
 
-    const options = { params: new HttpParams().set(sortString, sort).set(orderString, order).set(nameString, name) };
+    const options = { params: new HttpParams().set('sort', sort).set('order', order).set('name', name) };
     return this.http.get<ItemSummaryDTO>(this.itemBase + '/get', options);
   }
 
