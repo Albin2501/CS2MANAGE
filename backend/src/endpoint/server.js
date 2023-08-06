@@ -27,12 +27,25 @@ app.get(itemBase + '/get', async function (req, res) {
     res.send(await itemService.getAllItems(req.query));
 });
 
+app.get(itemBase + '/getOverview', async function (req, res) {
+    res.send(itemService.getAllOverviewItems(req.query));
+});
+
 app.post(itemBase + '/post', jsonParser, async function (req, res) {
     try {
         await itemService.postItem(req.body);
         res.sendStatus(204);
     } catch (err) {
         res.status(400).send(err.message);
+    }
+});
+
+app.patch(itemBase + '/edit', jsonParser, async function (req, res) {
+    try {
+        itemService.edit(req.body);
+        res.sendStatus(204);
+    } catch (err) {
+        res.status(404).send(err.message);
     }
 });
 

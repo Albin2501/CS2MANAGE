@@ -16,6 +16,10 @@ body {
     --cs2DarkRed: rgb(125, 55, 55);
 }
 
+body::-webkit-scrollbar {
+    display: none;
+}
+
 a {
     text-decoration: none;
     color: rgb(255, 255, 255);

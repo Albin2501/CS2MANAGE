@@ -1,0 +1,97 @@
+input {
+    width: 100%;
+}
+
+.createContainer {
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    padding-left: 1rem;
+    margin-top: 1rem;
+}
+
+.create {
+    background-color: var(--cs2DarkBlue);
+    border-radius: 0.25rem;
+    padding: 1rem 0;
+    width: 100%;
+    max-width: 64rem;
+}
+
+.createItem {
+    margin: 0.5rem 0 0.5rem 0;
+}
+
+.items {
+    display: grid;
+    align-items: center;
+    justify-items: center;
+}
+
+.item {
+    display: grid;
+    grid-template-columns: fit-content(1rem) 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+        'image name name date edit'
+        'image price amount profile delete';
+    background-color: var(--cs2LightBlue);
+    border-radius: 0.25rem;
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 64rem;
+    transition: transform 0.1s;
+}
+
+.image {
+    grid-area: image;
+    background: rgb(220, 220, 220);
+    border-radius: 0.25rem 0 0 0.25rem;
+    width: 125px;
+    height: 125px;
+    align-self: center;
+    justify-self: center;
+    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.25);
+}
+
+.name {
+    grid-area: name;
+    font-size: 1.5rem;
+    align-self: center;
+    margin-left: 1reM;
+}
+
+.price {
+    grid-area: price;
+    font-size: 1rem;
+    align-self: center;
+}
+
+
+.amount {
+    grid-area: amount;
+    font-size: 1rem;
+    align-self: center;
+}
+
+.profile {
+    grid-area: profile;
+    font-size: 1rem;
+    align-self: center;
+}
+
+.date {
+    grid-area: date;
+    align-self: first baseline;
+    justify-self: last baseline;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+}
+
+.editButton {
+    grid-area: edit
+}
+
+.deleteButton {
+    grid-area: delete
+}

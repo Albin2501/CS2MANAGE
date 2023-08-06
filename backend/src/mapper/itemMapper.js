@@ -28,12 +28,25 @@ function itemDTOToItem(itemDTO, image) {
         image: image,
         date: new Date(),
         price: +(itemDTO.price).toFixed(2),
-        amount: itemDTO.amount,
-        totalPrice: itemDTO.price * itemDTO.amount,
+        amount: +(itemDTO.amount).toFixed(2),
+        totalPrice: +(itemDTO.price * itemDTO.amount).toFixed(2),
         profileId: itemDTO.profileId
     };
 
     return item;
 }
 
-module.exports = { itemDTOToItem, itemToItemDTO };
+function itemEditDTOtoItem(itemEditDTO) {
+    const item = {
+        id: itemEditDTO.id,
+        date: new Date(),
+        price: +(itemEditDTO.price).toFixed(2),
+        amount: +(itemEditDTO.amount).toFixed(2),
+        totalPrice: +(itemEditDTO.price * itemEditDTO.amount).toFixed(2),
+        profileId: itemEditDTO.profileId
+    };
+
+    return item;
+}
+
+module.exports = { itemDTOToItem, itemToItemDTO, itemEditDTOtoItem };

@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+import { ItemDTO } from 'src/app/dto/itemDTO';
+import { ItemEditDTO } from 'src/app/dto/itemEditDTO';
 import { ProfileDTO } from 'src/app/dto/profileDTO';
 import { ItemService } from 'src/app/service/item/item.service';
 import { ProfileService } from 'src/app/service/profile/profile.service';
 import { ToastifyService } from 'src/app/service/toastify/toastify.service';
+import { formatDate } from 'src/app/util/formatter';
 
 @Component({
   selector: 'app-item-manage',
@@ -23,11 +26,28 @@ export class ItemManageComponent implements OnInit {
     profileId: [null, Validators.required]
   });
 
+  items: ItemDTO[] = [];
+
   constructor(private itemService: ItemService, private profileService: ProfileService,
     private formBuilder: FormBuilder, private toastifyService: ToastifyService) { }
 
   ngOnInit(): void {
+    this.get();
     this.getProfiles();
+  }
+
+  get(): void {
+    this.itemService.getOverview().subscribe({
+      next: items => {
+        this.items = items;
+      },
+      error: error => {
+        this.toastifyService.errorToast(error.error);
+      },
+      complete: () => {
+        console.log(this.items);
+      }
+    });
   }
 
   getProfiles(): void {
@@ -47,14 +67,14 @@ export class ItemManageComponent implements OnInit {
   post(): void {
     const condition = this.createForm.value.condition;
 
-    const itemDTO = {
+    const itemCreateDTO = {
       name: this.createForm.value.name + (condition != this.conditions[0] ? ` (${condition})` : ''),
       price: this.createForm.value.price,
       amount: this.createForm.value.amount,
       profileId: this.createForm.value.profileId,
     };
 
-    this.itemService.post(itemDTO).subscribe({
+    this.itemService.post(itemCreateDTO).subscribe({
       next: () => {
         this.toastifyService.successToast(`Item '${this.createForm.value.name}' successfully added.`);
       },
@@ -63,6 +83,36 @@ export class ItemManageComponent implements OnInit {
       },
       complete: () => {
         this.reset();
+        this.get();
+      }
+    });
+  }
+
+  edit(): void {
+    // TODO this and the successtoast
+    this.itemService.edit({} as ItemEditDTO).subscribe({
+      next: () => {
+        this.toastifyService.successToast(`Item TODO successfully edited.`);
+      },
+      error: error => {
+        this.toastifyService.errorToast(error.error);
+      },
+      complete: () => {
+        this.get();
+      }
+    });
+  }
+
+  delete(id: number, name: string): void {
+    this.itemService.delete(id).subscribe({
+      next: () => {
+        this.toastifyService.successToast(`Item '${name}' successfully deleted.`);
+      },
+      error: error => {
+        this.toastifyService.errorToast(error.error);
+      },
+      complete: () => {
+        this.get();
       }
     });
   }
@@ -80,4 +130,9 @@ export class ItemManageComponent implements OnInit {
       profileId: [this.profiles[0].id, Validators.required]
     });
   }
+
+  formatDate(date: Date): string {
+    return formatDate(new Date(date));
+  }
+
 }

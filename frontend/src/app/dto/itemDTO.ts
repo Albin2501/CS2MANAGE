@@ -1,6 +1,10 @@
 export interface ItemDTO {
-    name: string | null | undefined,
-    price: number | null | undefined,
-    amount: number | null | undefined,
-    profileId: number | null | undefined
+    id: number,
+    name: string,
+    image: string,
+    date: Date,
+    price: number,
+    amount: number,
+    totalPrice: number,
+    profileId: number
 }

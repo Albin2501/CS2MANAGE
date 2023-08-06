@@ -59,6 +59,10 @@
     background: rgb(100, 129, 100);
 }
 
+.EDIT_ITEM {
+    background: rgb(100, 129, 124);
+}
+
 .DELETE_ITEM {
     background: rgb(120, 100, 100);
 }

@@ -12,6 +12,13 @@ function get() {
     return readFromFile();
 }
 
+function getOverview() {
+    // if itemDatabase.json does not exist yet, create it
+    if (!fs.existsSync(filePath)) writeToFile({ id: 0, items: [] });
+
+    return readFromFile().items;
+}
+
 function set(item) {
     const itemDatabase = get();
     item.id = itemDatabase.id;
@@ -24,16 +31,36 @@ function set(item) {
     writeToFile(itemDatabase);
 }
 
+function edit(item) {
+    const itemDatabase = get();
+    const index = binarySearch.searchIdIndex(item.id, itemDatabase.items);
+
+    // if id does not exists, throw error
+    if (index == -1) throw new Error('Id of item does not exist.');
+
+    let editedItem = itemDatabase.items[index];
+
+    itemDatabase.items[index].date = item.date;
+    itemDatabase.items[index].price = item.price;
+    itemDatabase.items[index].amount = item.amount;
+    itemDatabase.items[index].totalPrice = item.totalPrice;
+    itemDatabase.items[index].profileId = item.profileId;
+
+    writeToFile(itemDatabase);
+
+    return editedItem;
+}
+
 function remove(id) {
     const itemDatabase = get();
+    const index = binarySearch.searchIdIndex(id, itemDatabase.items);
     let item;
 
-    for (let i = 0; i < itemDatabase.items.length; i++) {
-        if (id == itemDatabase.items[i].id) {
-            item = itemDatabase.items.splice(i, 1)[0];
-            writeToFile(itemDatabase);
-        }
-    }
+    // if id does not exists, throw error
+    if (index == -1) throw new Error('Id of item does not exist.');
+
+    item = itemDatabase.items.splice(index, 1)[0];
+    writeToFile(itemDatabase);
 
     return item;
 }
@@ -42,7 +69,7 @@ function removeAll(id) {
     writeToFile({ id: 0, items: [] });
 }
 
-module.exports = { get, set, remove, removeAll };
+module.exports = { get, getOverview, set, edit, remove, removeAll };
 
 // ------------------------------- HELPER FUNCTIONS -------------------------------
 

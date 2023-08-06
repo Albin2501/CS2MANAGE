@@ -5,6 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 
 import { backendBase } from '../../util/config';
 import { ItemSummaryDTO } from 'src/app/dto/itemSummaryDTO';
+import { ItemCreateDTO } from 'src/app/dto/itemCreateDTO';
+import { ItemEditDTO } from 'src/app/dto/itemEditDTO';
 import { ItemDTO } from 'src/app/dto/itemDTO';
 
 @Injectable({
@@ -34,8 +36,31 @@ export class ItemService {
     return this.http.get<ItemSummaryDTO>(this.itemBase + '/get', options);
   }
 
-  post(itemDTO: ItemDTO): Observable<void> {
-    return this.http.post<void>(this.itemBase + '/post', itemDTO);
+  getOverview(): Observable<ItemDTO[]> {
+    let sort, order, name;
+
+    this.route.queryParams.subscribe(params => {
+      sort = params['sort'];
+      order = params['order'];
+      name = params['name'];
+    });
+
+    if (!(sort || order || name)) return this.http.get<ItemDTO[]>(this.itemBase + '/getOverview');
+
+    sort = sort ? sort : 'date';
+    order = order ? order : 'desc';
+    name = name ? name : '';
+
+    const options = { params: new HttpParams().set('sort', sort).set('order', order).set('name', name) };
+    return this.http.get<ItemDTO[]>(this.itemBase + '/getOverview', options);
+  }
+
+  post(itemCreateDTO: ItemCreateDTO): Observable<void> {
+    return this.http.post<void>(this.itemBase + '/post', itemCreateDTO);
+  }
+
+  edit(itemEditDTO: ItemEditDTO): Observable<void> {
+    return this.http.patch<void>(this.itemBase + '/edit', itemEditDTO);
   }
 
   delete(id: number): Observable<void> {

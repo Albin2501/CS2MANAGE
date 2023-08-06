@@ -51,6 +51,37 @@ async function getAllItems(query) {
 }
 
 /**
+ * Retrieves all items from itemDatabase.json.
+ * Items are being filtered according to the given query parameters.
+ * @param  {Object} query   Given query parameters
+ * @return {Object}         persisted and filtered items
+ */
+function getAllOverviewItems(query) {
+    let items = itemDatabase.getOverview();
+
+    if (query && (query.order || query.sort || query.name)) {
+        const order = query.order ? query.order : '';
+        const sort = query.sort ? query.sort : '';
+        const name = query.name ? query.name.toLowerCase() : '';
+        let s1 = order == 'desc' ? -1 : 1;
+        let s2 = order == 'desc' ? 1 : -1;
+
+        items = items.filter(item => item.name.toLowerCase().includes(name)); // this filters unfit items
+        if (sort == 'date' || sort == 'name') items = items.sort((a, b) => { return a[sort] < b[sort] ? s2 : s1 });
+        else items = items.sort((a, b) => { return s1 * a[sort] + s2 * b[sort] });
+    }
+
+    items.map(item => {
+        item.price = +(item.price.toFixed(2));
+        item.amount = +(item.amount.toFixed(2));
+        item.totalPrice = +(item.totalPrice.toFixed(2));
+    });
+
+    // default: date, descending
+    return items;
+}
+
+/**
  * Sends mapped object from frontend to the persistence layer so it can be saved. Before it gets persisted,
  * the image of the item will be fetched from steam to assure that the item exists.
  * It does not garantee that the given condition of a skin exists. Only if the image exists,
@@ -70,6 +101,14 @@ async function postItem(itemDTO) {
     historyService.postHistoryEntry(item, historyType.type.CREATE_ITEM);
 }
 
+function edit(itemEditDTO) {
+    const newItem = itemMapper.itemEditDTOtoItem(itemEditDTO);
+    const oldItem = itemDatabase.edit(toBeEditedItem);
+
+    cache.setDirty();
+    if (item) historyService.postHistoryEntry({ newItem: newItem, oldItem: oldItem }, historyType.type.EDIT_ITEM);
+}
+
 function deleteItem(id) {
     const item = itemDatabase.remove(id);
 
@@ -84,7 +123,7 @@ function deleteAllItems() {
     historyService.postHistoryEntry(null, historyType.type.DELETE_ALLITEMS);
 }
 
-module.exports = { getAllItems, postItem, deleteItem, deleteAllItems };
+module.exports = { getAllItems, getAllOverviewItems, postItem, edit, deleteItem, deleteAllItems };
 
 // ------------------------------- HELPER FUNCTIONS -------------------------------
 

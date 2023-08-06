@@ -20,12 +20,24 @@ module.exports = { dataToHistoryEntry };
 function createContentsFromItem(item, type) {
     let responseString = 'Something went wrong ...';
 
-    if (type == historyEntry.type.CREATE_ITEM) {
-        responseString = `Item '${item.name}' (${item.amount} / ${item.price}€) has been added.`;
-    } else if (type == historyEntry.type.INFO) {
-        responseString = 'TODO'
+    if (type == historyEntry.type.INFO) {
+        responseString = 'TODO';
+    } else if (type == historyEntry.type.CREATE_ITEM) {
+        responseString = `Item '${item.name}' (${item.price}€ / ${item.amount}) has been added.`;
+    } else if (type == historyEntry.type.EDIT_ITEM) {
+        const newPrice = item.newItem.price != item.oldItem.price;
+        const newAmount = item.newItem.amount != item.oldItem.amount;
+        const newProfileId = item.newItem.profileId != item.oldItem.profileId;
+
+        responseString = `'${item.oldItem.name}'`;
+        if (newPrice || newAmount) responseString += ' changed from ' + `(${item.oldItem.price}€ / ${item.oldItem.amount}) to (${item.newItem.price}€ / ${item.newItem.amount})`;
+        if ((newPrice || newAmount) && newProfileId) responseString += ' and ';
+        if ((newPrice || newAmount) && !newProfileId) responseString += '.';
+        if (newProfileId) responseString += ' is now under a different profile.';
+
+        return responseString;
     } else if (type == historyEntry.type.DELETE_ITEM) {
-        responseString = `Item '${item.name}' (${item.amount} / ${item.price}€) has been deleted.`;
+        responseString = `Item '${item.name}' (${item.price}€ / ${item.amount}) has been deleted.`;
     } else if (type == historyEntry.type.DELETE_ALLITEMS) {
         responseString = 'Every item has been deleted.';
     } else if (type == historyEntry.type.EDIT_PROFILE) {
