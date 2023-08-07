@@ -4,6 +4,9 @@ const historyType = require('../util/historyEntry');
 const itemDatabase = require('../persistence/itemDatabase');
 const cache = require('../persistence/cache');
 
+// TODO: Add trim to search for 'name' -> .trim()
+// TODO: profileId of items seems to be a string sometimes?
+
 // ------------------------------- EXPORTED FUNCTIONS -------------------------------
 
 /**
@@ -103,10 +106,10 @@ async function postItem(itemDTO) {
 
 function edit(itemEditDTO) {
     const newItem = itemMapper.itemEditDTOtoItem(itemEditDTO);
-    const oldItem = itemDatabase.edit(toBeEditedItem);
+    const oldItem = itemDatabase.edit(newItem);
 
     cache.setDirty();
-    if (item) historyService.postHistoryEntry({ newItem: newItem, oldItem: oldItem }, historyType.type.EDIT_ITEM);
+    historyService.postHistoryEntry({ newItem: newItem, oldItem: oldItem }, historyType.type.EDIT_ITEM);
 }
 
 function deleteItem(id) {

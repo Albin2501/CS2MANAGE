@@ -38,9 +38,14 @@ function edit(item) {
     // if id does not exists, throw error
     if (index == -1) throw new Error('Id of item does not exist.');
 
-    let editedItem = itemDatabase.items[index];
+    let editedItem = JSON.parse(JSON.stringify(itemDatabase.items[index]));
 
-    itemDatabase.items[index].date = item.date;
+    // if nothing changed, throw error
+    if (itemDatabase.items[index].price == item.price &&
+        itemDatabase.items[index].amount == item.amount &&
+        itemDatabase.items[index].profileId == item.profileId)
+        throw new Error('Different values required for edit of item.');
+
     itemDatabase.items[index].price = item.price;
     itemDatabase.items[index].amount = item.amount;
     itemDatabase.items[index].totalPrice = item.totalPrice;

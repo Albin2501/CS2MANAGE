@@ -43,9 +43,6 @@ export class ItemManageComponent implements OnInit {
       },
       error: error => {
         this.toastifyService.errorToast(error.error);
-      },
-      complete: () => {
-        console.log(this.items);
       }
     });
   }
@@ -88,11 +85,17 @@ export class ItemManageComponent implements OnInit {
     });
   }
 
-  edit(): void {
-    // TODO this and the successtoast
-    this.itemService.edit({} as ItemEditDTO).subscribe({
+  edit(item: ItemDTO): void {
+    const itemEditDTO = {
+      id: item.id,
+      price: item.price,
+      amount: item.amount,
+      profileId: item.profileId
+    };
+
+    this.itemService.edit(itemEditDTO).subscribe({
       next: () => {
-        this.toastifyService.successToast(`Item TODO successfully edited.`);
+        this.toastifyService.successToast(`Item '${item.name}' successfully edited.`);
       },
       error: error => {
         this.toastifyService.errorToast(error.error);

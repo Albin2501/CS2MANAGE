@@ -39,7 +39,6 @@ function itemDTOToItem(itemDTO, image) {
 function itemEditDTOtoItem(itemEditDTO) {
     const item = {
         id: itemEditDTO.id,
-        date: new Date(),
         price: +(itemEditDTO.price).toFixed(2),
         amount: +(itemEditDTO.amount).toFixed(2),
         totalPrice: +(itemEditDTO.price * itemEditDTO.amount).toFixed(2),

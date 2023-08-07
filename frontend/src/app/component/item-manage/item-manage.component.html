@@ -41,14 +41,14 @@
     <div class='item' *ngFor='let item of items'>
         <img class='image' src='{{item.image}}' alt='Image of {{item.name}}'>
         <div class='name'>{{item.name}}</div>
-        <input class='price' type='number' value='{{item.price}}'>
+        <input class='price' type='number' value='{{item.price}}' [(ngModel)]='item.price'>
         <input class='amount' type='number' onkeypress='return (event.charCode == 0 || event.charCode == 8 || event.charCode == 13) ?
-            null : event.charCode >= 48 && event.charCode <= 57' value='{{item.amount}}'>
-        <select class='profile'>
+            null : event.charCode >= 48 && event.charCode <= 57' value='{{item.amount}}' [(ngModel)]='item.amount'>
+        <select class='profile' [(ngModel)]='item.profileId'>
             <option *ngFor='let profile of profiles' value='{{profile.id}}'>{{profile.name}}</option>
         </select>
         <div class='date'>{{formatDate(item.date)}}</div>
-        <button class='editButton'>✎</button>
+        <button class='editButton' (click)='edit(item)'>✎</button>
         <button class='deleteButton' (click)='delete(item.id, item.name)'>🗑</button>
     </div>
 </div>
