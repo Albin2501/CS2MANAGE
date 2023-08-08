@@ -6,6 +6,7 @@ const jsonParser = bodyParser.json();
 const itemService = require('../service/itemService');
 const profileService = require('../service/profileService');
 const historyService = require('../service/historyService');
+const userService = require('../service/userService');
 
 // ------------------------------- INITIALIZATION -------------------------------
 
@@ -102,4 +103,28 @@ app.delete(historyBase + '/delete', async function (req, res) {
 app.delete(historyBase + '/deleteAll', async function (req, res) {
     historyService.deleteHistory();
     res.sendStatus(204);
+});
+
+// ------------------------------- USER
+const userBase = '/user';
+
+app.get(userBase + '/get', async function (req, res) {
+    res.send(userService.getUserInfo());
+});
+
+app.get(userBase + '/getSteamItems', async function (req, res) {
+    try {
+        res.send(await userService.getSteamItems(+(req.query.group)));
+    } catch (err) {
+        res.status(503).send(err.message);
+    }
+});
+
+app.patch(userBase + '/edit', jsonParser, async function (req, res) {
+    try {
+        userService.editUserInfo(req.body);
+        res.sendStatus(204);
+    } catch (err) {
+        res.status(400).send(err.message);
+    }
 });

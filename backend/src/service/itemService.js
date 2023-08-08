@@ -105,7 +105,7 @@ async function postItem(itemDTO) {
 }
 
 function edit(itemEditDTO) {
-    const newItem = itemMapper.itemEditDTOtoItem(itemEditDTO);
+    const newItem = itemMapper.itemEditDTOToItem(itemEditDTO);
     const oldItem = itemDatabase.edit(newItem);
 
     cache.setDirty();

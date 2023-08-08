@@ -36,7 +36,7 @@ function itemDTOToItem(itemDTO, image) {
     return item;
 }
 
-function itemEditDTOtoItem(itemEditDTO) {
+function itemEditDTOToItem(itemEditDTO) {
     const item = {
         id: itemEditDTO.id,
         price: +(itemEditDTO.price).toFixed(2),
@@ -48,4 +48,4 @@ function itemEditDTOtoItem(itemEditDTO) {
     return item;
 }
 
-module.exports = { itemDTOToItem, itemToItemDTO, itemEditDTOtoItem };
+module.exports = { itemDTOToItem, itemToItemDTO, itemEditDTOToItem };
