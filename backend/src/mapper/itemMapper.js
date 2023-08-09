@@ -36,6 +36,18 @@ function itemDTOToItem(itemDTO, image) {
     return item;
 }
 
+function itemDTOListToItemList(itemDTOList) {
+    const items = [];
+    let item;
+
+    for (let i = 0; i < itemDTOList.length; i++) {
+        item = itemDTOToItem(itemDTOList[i], itemDTOList[i].image);
+        items.push(item);
+    }
+
+    return items;
+}
+
 function itemEditDTOToItem(itemEditDTO) {
     const item = {
         id: itemEditDTO.id,
@@ -48,4 +60,4 @@ function itemEditDTOToItem(itemEditDTO) {
     return item;
 }
 
-module.exports = { itemDTOToItem, itemToItemDTO, itemEditDTOToItem };
+module.exports = { itemDTOToItem, itemToItemDTO, itemDTOListToItemList, itemEditDTOToItem };

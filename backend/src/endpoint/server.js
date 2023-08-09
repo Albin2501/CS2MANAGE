@@ -120,6 +120,7 @@ app.get(userBase + '/getSteamItems', async function (req, res) {
     }
 });
 
+// steamId must be sent as string, since precision issue occur when dealing with numbers
 app.patch(userBase + '/edit', jsonParser, async function (req, res) {
     try {
         userService.editUserInfo(req.body);

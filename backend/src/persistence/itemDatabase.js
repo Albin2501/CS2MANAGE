@@ -31,6 +31,22 @@ function set(item) {
     writeToFile(itemDatabase);
 }
 
+function setList(items) {
+    let itemDatabase = get();
+
+    for (let i = 0; i < items.length; i++) {
+        items[i].id = itemDatabase.id;
+
+        // if id already exists, throw error
+        if (binarySearch.searchId(items[i].id, itemDatabase.items)) throw new Error('Id of item must be unique.');
+
+        itemDatabase.items.unshift(items[i]);
+        itemDatabase.id++;
+    }
+
+    writeToFile(itemDatabase);
+}
+
 function edit(item) {
     const itemDatabase = get();
     const index = binarySearch.searchIdIndex(item.id, itemDatabase.items);
@@ -74,7 +90,7 @@ function removeAll(id) {
     writeToFile({ id: 0, items: [] });
 }
 
-module.exports = { get, getOverview, set, edit, remove, removeAll };
+module.exports = { get, getOverview, set, setList, edit, remove, removeAll };
 
 // ------------------------------- HELPER FUNCTIONS -------------------------------
 

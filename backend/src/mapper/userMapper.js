@@ -3,7 +3,7 @@
 function userInfoDTOToUserInfo(userInfoDTO) {
     const userInfo = {
         name: userInfoDTO.name,
-        steamId: +userInfoDTO.steamId
+        steamId: userInfoDTO.steamId
     };
 
     return userInfo;

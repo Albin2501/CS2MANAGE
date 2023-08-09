@@ -53,6 +53,8 @@ function createContentsFromItem(item, type) {
         } else if (newDescription) {
             responseString = `The description of '${item.oldProfile.name}' changed.`;
         }
+    } else if (type == historyEntry.type.ADD_INVENTORY) {
+        responseString = `Invetory of steam user '${item}' has been added.`;
     }
 
     return responseString;

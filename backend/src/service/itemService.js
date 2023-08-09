@@ -89,19 +89,39 @@ function getAllOverviewItems(query) {
  * the image of the item will be fetched from steam to assure that the item exists.
  * It does not garantee that the given condition of a skin exists. Only if the image exists,
  * the item will be persisted.
- * @param  {Object} itemDTO Object send from frontend
+ * If the items are sent in a list, it is expected that the items exists as well as that the
+ * image was already retrieved.
+ * @param  {Object} itemDTO (List of) object(s) sent from frontend (with steamId when sent as list)
  */
 async function postItem(itemDTO) {
-    const noImage = 'https://community.cloudflare.steamstatic.com/economy/image//360fx360f';
-    const image = await getImage(itemDTO.name);
+    if (Array.isArray(itemDTO.items)) {
+        let errorArray = [];
+        for (let i = 0; i < itemDTO.items.length; i++) {
+            if (!itemDTO.items[i].image) errorArray.push(`'${itemDTO.items[i].name}'`);
+        }
 
-    if (image == noImage) throw Error(`Item '${itemDTO.name}' does not exists.`);
+        if (errorArray.length > 0) {
+            const multiples = errorArray.length > 1;
+            throw Error(`Item${multiples ? 's' : ''} ${errorArray.join(', ')} ${multiples ? 'do not' : 'does not'} exist.`);
+        }
 
-    const item = itemMapper.itemDTOToItem(itemDTO, image);
+        const items = itemMapper.itemDTOListToItemList(itemDTO.items);
 
-    itemDatabase.set(item);
-    cache.setDirty();
-    historyService.postHistoryEntry(item, historyType.type.CREATE_ITEM);
+        itemDatabase.setList(items);
+        cache.setDirty();
+        historyService.postHistoryEntry(itemDTO.steamId, historyType.type.ADD_INVENTORY);
+    } else {
+        const noImage = 'https://community.cloudflare.steamstatic.com/economy/image//360fx360f';
+        const image = await getImage(itemDTO.name);
+
+        if (image == noImage) throw Error(`Item '${itemDTO.name}' does not exists.`);
+
+        const item = itemMapper.itemDTOToItem(itemDTO, image);
+
+        itemDatabase.set(item);
+        cache.setDirty();
+        historyService.postHistoryEntry(item, historyType.type.CREATE_ITEM);
+    }
 }
 
 function edit(itemEditDTO) {

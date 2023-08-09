@@ -1,8 +1,6 @@
 const userMapper = require('../mapper/userMapper');
 const userDatabase = require('../persistence/userDatabase');
 
-// TODO: Check what happens, when inventory is set to private
-
 // ------------------------------- EXPORTED FUNCTIONS -------------------------------
 
 function getUserInfo() {
@@ -12,15 +10,14 @@ function getUserInfo() {
 /**
  * Retrieves all items from the specified steam inventory.
  * @param   {boolean} group     if 0 then items with identical names do not get grouped, else they do
- * @returns {Object}            Cache containing metadata and items
+ * @returns {Object}            list of items in steam inventory
  */
 async function getSteamItems(group) {
-    const allItems = await getSteamInvetory();
-
-    console.log(allItems);
+    const steamId = userDatabase.get().steamId;
+    const allItems = await getSteamInvetory(steamId);
 
     // if too many calls were made, throw error
-    if (!allItems) throw new Error('Steam inventory can not be retrieved. Try again later.');
+    if (!allItems) throw new Error('Steam inventory can not be retrieved. Make sure that your inventory is public. Try again later.');
 
     const allAssets = allItems.assets;
     const allDescriptions = allItems.descriptions;
@@ -46,20 +43,21 @@ async function getSteamItems(group) {
                 item = {
                     name: allDescriptions[i].market_hash_name,
                     image: imageBaseURI + allDescriptions[i].icon_url,
-                    amount: amount
+                    amount: amount,
+                    price: 0,
+                    profileId: 1
                 };
                 filteredItems.push(item);
             }
         }
     }
 
-    return filteredItems;
+    return { steamId: steamId, items: filteredItems };
 }
 
 function editUserInfo(userInfoDTO) {
-    const steamId = userInfoDTO.steamId.toString();
-    if (!(steamId.length == 17 && steamId.startsWith('76561198')))
-        throw new Error('Format of SteamId is incorrect. Make sure that your inventory is public. Try again later.');
+    if (!(userInfoDTO.steamId.length == 17 && userInfoDTO.steamId.startsWith('76561198')))
+        throw new Error('Format of SteamId is incorrect.');
 
     return userDatabase.edit(userMapper.userInfoDTOToUserInfo(userInfoDTO));
 }
@@ -71,8 +69,7 @@ module.exports = { getUserInfo, getSteamItems, editUserInfo };
 const steamInventoryURI = `https://steamcommunity.com/inventory/steamId/730/2`;
 const imageBaseURI = 'https://community.cloudflare.steamstatic.com/economy/image/';
 
-async function getSteamInvetory() {
-    const steamId = userDatabase.get().steamId.toString();
+async function getSteamInvetory(steamId) {
     try {
         return await (await fetch(encodeURI(steamInventoryURI.replace('steamId', steamId)))).json();
     } catch (err) {
