@@ -26,8 +26,8 @@ export class HeaderComponent implements OnInit {
       active: false
     },
     {
-      name: 'LOADING',
-      link: '/loading',
+      name: 'USER',
+      link: '/user',
       active: false
     }
   ];

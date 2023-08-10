@@ -59,6 +59,10 @@ export class ItemService {
     return this.http.post<void>(this.itemBase + '/post', itemCreateDTO);
   }
 
+  postList(itemCreateDTOList: { steamId: string, items: ItemCreateDTO[] }): Observable<void> {
+    return this.http.post<void>(this.itemBase + '/post', itemCreateDTOList);
+  }
+
   edit(itemEditDTO: ItemEditDTO): Observable<void> {
     return this.http.patch<void>(this.itemBase + '/edit', itemEditDTO);
   }

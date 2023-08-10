@@ -1,0 +1,131 @@
+.items {
+    display: grid;
+    align-items: center;
+    justify-items: center;
+}
+
+.item {
+    display: grid;
+    grid-template-columns: fit-content(1rem) 2fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+        'image name name date'
+        'image totalPrice totalProfitSP totalProfitSCM';
+    background-color: var(--cs2LightBlue);
+    border-radius: 0.25rem;
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 64rem;
+    transition: transform 0.1s;
+}
+
+.item:hover {
+    background-color: var(--cs2LightBlueOnHover);
+    transform: scale(1.005);
+    box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.25);
+}
+
+.item:hover>.price>.priceEmphasis {
+    font-weight: bold;
+    animation-name: priceAnimation;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    border-radius: 4rem;
+}
+
+@keyframes priceAnimation {
+    10% {
+        background: rgba(255, 140, 10, 0);
+        box-shadow: 0 0 0 0px rgba(255, 140, 10, 0);
+    }
+
+    50% {
+        background: rgba(255, 140, 10, 0.3);
+        box-shadow: 0 0 0 7.5px rgba(255, 140, 10, 0.3);
+    }
+
+    90% {
+        background: rgba(255, 140, 10, 0);
+        box-shadow: 0 0 0 15px rgba(255, 140, 10, 0);
+    }
+}
+
+.item:hover>.date {
+    opacity: 100%;
+}
+
+.image {
+    grid-area: image;
+    background: rgb(220, 220, 220);
+    border-radius: 0.25rem 0 0 0.25rem;
+    width: 125px;
+    height: 125px;
+    align-self: center;
+    justify-self: center;
+    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.25);
+}
+
+.name {
+    grid-area: name;
+    font-size: 1.5rem;
+    align-self: center;
+    margin-left: 1reM;
+}
+
+.price {
+    font-size: 1.5rem;
+    align-self: center;
+}
+
+.totalPrice {
+    grid-area: totalPrice;
+    margin-left: 1rem;
+}
+
+.amount {
+    display: inline;
+    font-size: 1rem;
+    align-self: center;
+}
+
+.totalProfitSP {
+    grid-area: totalProfitSP;
+    justify-self: end;
+    margin-right: 1rem;
+}
+
+.totalProfitSCM {
+    grid-area: totalProfitSCM;
+    justify-self: end;
+    margin-right: 1rem;
+}
+
+.date {
+    grid-area: date;
+    align-self: first baseline;
+    justify-self: last baseline;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+    opacity: 0%;
+}
+
+.pos {
+    color: var(--cs2Green);
+}
+
+.neg {
+    color: var(--cs2Red);
+}
+
+.loadingBar {
+    color: var(--cs2DarkBlue);
+    background-color: var(--cs2Orange);
+    font-size: 1.25rem;
+    text-align: center;
+    width: 100%;
+    max-width: 64rem;
+    padding: 1rem 0 1rem 0;
+    margin-top: 1rem;
+    cursor: pointer;
+}

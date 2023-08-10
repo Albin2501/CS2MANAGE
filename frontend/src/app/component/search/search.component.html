@@ -1,0 +1,14 @@
+<div class='optionsContainer'>
+    <div class='options'>
+        <div class='searchContainer'>
+            <input class='searchInput' type='search' placeholder='Search'
+                (keypress)='$event.key == "Enter" ? setObjects(true, search.value) : {};' #search>
+            <button class=' searchButton' type='button' (click)='setObjects(true, search.value)'>🔍</button>
+        </div>
+        <div *ngFor=' let sort of sorts' class='option sort'
+            [ngClass]="{'active': sort.active, 'inactive': !sort.active}" (click)='setObjects(false, sort.value)'>
+            {{sort.name}} <span
+                [ngClass]="{'activeOrder': sort.active, 'inactiveOrder': !sort.active}">{{getRepresentationOfOrder(sort.order)}}</span>
+        </div>
+    </div>
+</div>

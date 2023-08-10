@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { ItemDTO } from 'src/app/dto/itemDTO';
-import { ItemEditDTO } from 'src/app/dto/itemEditDTO';
 import { ProfileDTO } from 'src/app/dto/profileDTO';
 import { ItemService } from 'src/app/service/item/item.service';
 import { ProfileService } from 'src/app/service/profile/profile.service';
@@ -66,6 +65,7 @@ export class ItemManageComponent implements OnInit {
 
     const itemCreateDTO = {
       name: this.createForm.value.name + (condition != this.conditions[0] ? ` (${condition})` : ''),
+      image: null,
       price: this.createForm.value.price,
       amount: this.createForm.value.amount,
       profileId: this.createForm.value.profileId,
@@ -120,6 +120,20 @@ export class ItemManageComponent implements OnInit {
     });
   }
 
+  deleteAll(): void {
+    this.itemService.deleteAll().subscribe({
+      next: () => {
+        this.toastifyService.successToast(`All items successfully deleted.`);
+      },
+      error: error => {
+        this.toastifyService.errorToast(error.error);
+      },
+      complete: () => {
+        this.get();
+      }
+    });
+  }
+
   reset(): void {
     this.createForm = this.initialForm();
   }
@@ -137,5 +151,4 @@ export class ItemManageComponent implements OnInit {
   formatDate(date: Date): string {
     return formatDate(new Date(date));
   }
-
 }

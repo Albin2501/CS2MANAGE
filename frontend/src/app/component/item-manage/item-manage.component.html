@@ -1,54 +1,65 @@
+<a [routerLink]="['/items/inventory']">ADD INVENTORY</a>
+<button (click)='deleteAll()'>DELETEALL</button>
+
 <div class='createContainer'>
     <div class='create'>
         <form [formGroup]='createForm'>
             <div class='createItem'>
-                <label for='name'>Name:</label>
+                <label for='name'>Name</label>
                 <input type='text' name='name' formControlName='name' required>
             </div>
 
             <div class='createItem'>
-                <label for='condition'>Condition:</label>
+                <label for='condition'>Condition</label>
                 <select name='condition' formControlName='condition' required>
                     <option *ngFor='let condition of conditions' value='{{condition}}'>{{condition}}</option>
                 </select>
             </div>
 
             <div class='createItem'>
-                <label for='price'>Price:</label>
+                <label for='price'>Price</label>
                 <input type='number' name='price' formControlName='price' required>
             </div>
 
             <div class='createItem'>
-                <label for=' amount'>Amount:</label>
+                <label for=' amount'>Amount</label>
                 <input type='number' name='amount' formControlName='amount' required onkeypress='return (event.charCode == 0 || event.charCode == 8 || event.charCode == 13) ?
             null : event.charCode >= 48 && event.charCode <= 57'>
             </div>
 
             <div class='createItem'>
-                <label for='profile'>Profile:</label>
+                <label for='profile'>Profile</label>
                 <select name='profile' formControlName='profileId' required>
                     <option *ngFor='let profile of profiles' value='{{profile.id}}'>{{profile.name}}</option>
                 </select>
             </div>
 
-            <button (click)='post()' [disabled]='!createForm.valid'>ADD</button>
-            <button (click)='reset()'>CANCEL</button>
+            <div class='buttonContainer'>
+                <button class='reset' (click)='reset()'>Reset Form ↺</button>
+                <button class='add' (click)='post()' [disabled]='!createForm.valid'>Add Item +</button>
+            </div>
         </form>
     </div>
 </div>
 
-<div class='items'>
-    <div class='item' *ngFor='let item of items'>
-        <img class='image' src='{{item.image}}' alt='Image of {{item.name}}'>
-        <div class='name'>{{item.name}}</div>
-        <input class='price' type='number' value='{{item.price}}' [(ngModel)]='item.price'>
-        <input class='amount' type='number' onkeypress='return (event.charCode == 0 || event.charCode == 8 || event.charCode == 13) ?
-            null : event.charCode >= 48 && event.charCode <= 57' value='{{item.amount}}' [(ngModel)]='item.amount'>
-        <select class='profile' [(ngModel)]='item.profileId'>
-            <option *ngFor='let profile of profiles' value='{{profile.id}}'>{{profile.name}}</option>
-        </select>
-        <div class='date'>{{formatDate(item.date)}}</div>
-        <button class='editButton' (click)='edit(item)'>✎</button>
-        <button class='deleteButton' (click)='delete(item.id, item.name)'>🗑</button>
+<app-search (get)='get()' [sortDeleteAmount]=2></app-search>
+
+<app-loading *ngIf='!items || items.length == 0; else display' />
+
+<ng-template #display>
+    <div class='items'>
+        <div class='item' *ngFor='let item of items'>
+            <img class='image' src='{{item.image}}' alt='Image of {{item.name}}'>
+            <div class='name'>{{item.name}}</div>
+            <input class='price' type='number' value='{{item.price}}' [(ngModel)]='item.price'>
+            <input class='amount' type='number' onkeypress='return (event.charCode == 0 || event.charCode == 8 || event.charCode == 13) ?
+                null : event.charCode >= 48 && event.charCode <= 57' value='{{item.amount}}' [(ngModel)]='item.amount'>
+            <select class='profile' [(ngModel)]='item.profileId'>
+                <option *ngFor='let profile of profiles' value='{{profile.id}}'>{{profile.name}}</option>
+            </select>
+            <div class='date'>{{formatDate(item.date)}}</div>
+            <button class='editButton' (click)='edit(item)'>✎</button>
+            <button class='deleteButton' (click)='delete(item.id, item.name)'>🗑</button>
+        </div>
     </div>
-</div>
+</ng-template>

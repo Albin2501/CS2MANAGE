@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { ItemSummaryDTO } from 'src/app/dto/itemSummaryDTO';
 import { ItemService } from 'src/app/service/item/item.service';
@@ -14,46 +13,11 @@ import { formatDate, formatPrice } from 'src/app/util/formatter';
 export class ItemSummaryComponent implements OnInit {
 
   itemSummary: ItemSummaryDTO = {} as ItemSummaryDTO;
-  name: string = '';
-  sorts = [
-    {
-      name: 'DATE',
-      value: 'date',
-      active: false,
-      order: true
-    },
-    {
-      name: 'PRICE',
-      value: 'totalPrice',
-      active: false,
-      order: true
-    },
-    {
-      name: 'AMOUNT',
-      value: 'amount',
-      active: false,
-      order: true
-    },
-    {
-      name: 'SKINPORT',
-      value: 'totalProfitSP',
-      active: false,
-      order: true
-    },
-    {
-      name: 'STEAM',
-      value: 'totalProfitSCM',
-      active: false,
-      order: true
-    }
-  ];
 
-  constructor(private itemService: ItemService, private router: Router,
-    private route: ActivatedRoute, private toastifyService: ToastifyService) { }
+  constructor(private itemService: ItemService, private toastifyService: ToastifyService) { }
 
   ngOnInit(): void {
     this.get();
-    this.setObjectsIntial();
   }
 
   get(): void {
@@ -67,92 +31,11 @@ export class ItemSummaryComponent implements OnInit {
     });
   }
 
-  setObjectsIntial(): void {
-    let existsActiveSort;
-    let sort, order, name;
-
-    // gets parameters from browser URL
-    this.route.queryParams.subscribe(params => {
-      sort = params['sort'];
-      order = params['order']
-      name = params['name'];
-    });
-
-    // sets active sort
-    for (let i = 0; i < this.sorts.length; i++) {
-      if (sort == this.sorts[i].value) {
-        this.sorts[i].active = true;
-        existsActiveSort = true;
-      }
-    }
-
-    // if no sort is active, the sort 'date' is set active
-    if (!existsActiveSort) this.sorts[0].active = true;
-
-    // sets correct order of active sort
-    for (let i = 0; i < this.sorts.length; i++) {
-      if (this.sorts[i].active) this.sorts[i].order = order ? this.getOrderOfString(order) : false;
-    }
-
-    // sets name
-    if (name) this.name = name;
-  }
-
-  setObjects(name: boolean, value: string): void {
-    const queryParams = {} as Params;
-
-    if (!name) {
-      // sets active sort, deactivates all other sorts
-      for (let i = 0; i < this.sorts.length; i++) {
-        if (value == this.sorts[i].value) {
-          this.sorts[i].active = true;
-          this.sorts[i].order = !this.sorts[i].order;
-        } else {
-          this.sorts[i].active = false;
-          this.sorts[i].order = true;
-        }
-      }
-    } else {
-      // sets name
-      this.name = value;
-    }
-
-    queryParams['sort'] = this.getActiveSort().value;
-    queryParams['order'] = this.getStringOfOrder(this.getActiveSort().order);
-    if (this.name.length > 0) queryParams['name'] = this.name; // empty entries should be ignored
-
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: queryParams
-    }).then(() => {
-      this.get()
-    });
-  }
-
-  getActiveSort() {
-    for (let i = 0; i < this.sorts.length; i++) {
-      if (this.sorts[i].active) return this.sorts[i];
-    }
-    return this.sorts[0];
-  }
-
   formatDate(date: Date): string {
     return formatDate(new Date(date));
   }
 
   formatPrice(number: number, bool: boolean): string {
     return formatPrice(number, bool);
-  }
-
-  getOrderOfString(order: string): boolean {
-    return order == 'asc' ? true : false;
-  }
-
-  getStringOfOrder(bool: boolean): string {
-    return bool ? 'asc' : 'desc';
-  }
-
-  getRepresentationOfOrder(bool: boolean): string {
-    return bool ? ' 🠕' : ' 🠗';
   }
 }

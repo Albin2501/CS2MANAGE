@@ -1,12 +1,7 @@
-input {
-    width: 100%;
-}
-
 .createContainer {
     display: grid;
     align-items: center;
     justify-items: center;
-    padding-left: 1rem;
     margin-top: 1rem;
 }
 
@@ -19,7 +14,85 @@ input {
 }
 
 .createItem {
-    margin: 0.5rem 0 0.5rem 0;
+    margin: 0 1rem 0 1rem;
+    display: grid;
+    grid-template-columns: 20% 80%;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+label {
+    font-size: 1.5rem;
+    text-align: left;
+}
+
+input {
+    box-sizing: border-box;
+    font-size: 1.25rem;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    border: none;
+    width: 100%;
+    color: var(--cs2White);
+    background-color: var(--cs2LightBlue);
+}
+
+input:focus-within {
+    outline: 1px solid var(--cs2Orange);
+}
+
+select {
+    font-size: 1.25rem;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    border: none;
+    width: 100%;
+    color: var(--cs2White);
+    background-color: var(--cs2LightBlue);
+}
+
+select:focus-within {
+    outline: 1px solid var(--cs2Orange);
+}
+
+input:hover {
+    background-origin: var(--cs2Orange);
+}
+
+.buttonContainer {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-column-gap: 1rem;
+    margin: 0 1rem 0 1rem;
+}
+
+.buttonContainer button {
+    border: none;
+    font-size: 1.25rem;
+    border-radius: 0.25rem;
+    padding: 0.25rem;
+    color: var(--cs2White);
+}
+
+.reset {
+    background-color: var(--cs2Red);
+}
+
+.reset:hover {
+    background-color: var(--cs2RedOnHover);
+}
+
+.add {
+    background-color: var(--cs2Green);
+}
+
+.add:disabled {
+    background-color: var(--cs2LightBlue);
+    cursor: not-allowed;
+}
+
+.add:enabled:hover {
+    background-color: var(--cs2GreenOnHover);
 }
 
 .items {

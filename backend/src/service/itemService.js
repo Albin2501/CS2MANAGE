@@ -111,10 +111,11 @@ async function postItem(itemDTO) {
         cache.setDirty();
         historyService.postHistoryEntry(itemDTO.steamId, historyType.type.ADD_INVENTORY);
     } else {
-        const noImage = 'https://community.cloudflare.steamstatic.com/economy/image//360fx360f';
+        const noImageCloudFare = 'https://community.cloudflare.steamstatic.com/economy/image//360fx360f';
+        const noImageAkamai = 'https://community.akamai.steamstatic.com/economy/image//360fx360f';
         const image = await getImage(itemDTO.name);
 
-        if (image == noImage) throw Error(`Item '${itemDTO.name}' does not exists.`);
+        if (!image || image == noImageCloudFare || image == noImageAkamai) throw Error(`Item '${itemDTO.name}' does not exists.`);
 
         const item = itemMapper.itemDTOToItem(itemDTO, image);
 
@@ -207,12 +208,12 @@ async function getPriceSPEverything() {
     } catch (err) {
         console.log(err);
     }
-    return null;
+    return [];
 }
 
 async function getImage(name) {
     try {
-        const document = (await jsdom.JSDOM.fromURL(steamImageURI + name)).window.document;
+        const document = (await jsdom.JSDOM.fromURL(encodeURI(steamImageURI + name))).window.document;
         let image;
 
         document.querySelectorAll('link[rel=image_src]').forEach(link => {

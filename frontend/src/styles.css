@@ -1,6 +1,13 @@
+@font-face {
+    font-family: 'Nunito';
+    src: url('src/assets/fonts/Nunito-VariableFont_wght.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Nunito';
     color: rgb(255, 254, 254);
     background: rgb(42, 42, 50);
 
@@ -11,8 +18,10 @@ body {
     --cs2LightBlue: rgb(65, 70, 90);
     --cs2LightBlueOnHover: rgb(75, 80, 100);
     --cs2Green: rgb(65, 165, 65);
+    --cs2GreenOnHover: rgb(87, 173, 87);
     --cs2DarkGreen: rgb(55, 125, 55);
     --cs2Red: rgb(230, 100, 100);
+    --cs2RedOnHover: rgb(233, 119, 119);
     --cs2DarkRed: rgb(125, 55, 55);
 }
 

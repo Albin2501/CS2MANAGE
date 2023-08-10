@@ -1,0 +1,36 @@
+<div class='items'>
+    <div class='item' *ngFor='let item of items'>
+        <img class='image' src='{{item.image}}' alt='Image of {{item.name}}'>
+        <div class='name'>{{item.name}}</div>
+        <div class='price totalPrice' *ngIf='item.amount < 2; else withAmount'>{{formatPrice(item.totalPrice,
+            true)}}
+        </div>
+        <ng-template #withAmount>
+            <div class='price totalPrice'>{{formatPrice(item.totalPrice, true)}}
+                <div class='amount'>({{formatPrice(item.price, true)}} / {{item.amount}})</div>
+            </div>
+        </ng-template>
+        <div class='price totalProfitSP'>
+            <a *ngIf='item.totalProfitSP; else noSP' class='priceEmphasis'
+                [ngClass]="{'pos': item.totalProfitSP >= 0, 'neg' : item.totalProfitSP < 0 }" href='{{item.linkSP}}'
+                target="_blank">{{formatPrice(item.totalProfitSP, false)}}</a>
+            <ng-template #noSP>
+                <div class='price'>—</div>
+            </ng-template>
+        </div>
+        <div class='price totalProfitSCM'>
+            <a *ngIf='item.totalProfitSCM; else noSCM' class='priceEmphasis'
+                [ngClass]="{'pos': item.totalProfitSCM >= 0, 'neg' : item.totalProfitSCM < 0 }" href='{{item.linkSCM}}'
+                target="_blank">{{formatPrice(item.totalProfitSCM, false)}}</a>
+            <ng-template #noSCM>
+                <div class='price'>—</div>
+            </ng-template>
+        </div>
+        <div class='date'>{{formatDate(item.date)}}</div>
+    </div>
+
+    <div class='loadingBar' (click)='loadItems()' *ngIf='itemsCopy.length > 5 && itemsCopy.length != items.length'>
+        Load other {{itemsCopy.length - itemShowAmount}} item{{itemsCopy.length - itemShowAmount > 1 ? 's' :
+        ''}} ...
+    </div>
+</div>

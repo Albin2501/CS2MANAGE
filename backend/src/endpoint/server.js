@@ -25,7 +25,11 @@ app.use(function (req, res, next) {
 const itemBase = '/item';
 
 app.get(itemBase + '/get', async function (req, res) {
-    res.send(await itemService.getAllItems(req.query));
+    try {
+        res.send(await itemService.getAllItems(req.query));
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
 });
 
 app.get(itemBase + '/getOverview', async function (req, res) {
