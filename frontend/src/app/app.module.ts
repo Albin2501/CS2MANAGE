@@ -11,9 +11,10 @@ import { ItemManageComponent } from './component/item-manage/item-manage.compone
 import { LoadingComponent } from './component/loading/loading.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserInventoryComponent } from './component/user-inventory/user-inventory.component';
-import { UserComponent } from './component/user/user.component';
 import { SearchComponent } from './component/search/search.component';
 import { ItemDetailComponent } from './component/item-detail/item-detail.component';
+import { ItemComponent } from './component/item/item.component';
+import { InfoboxComponent } from './component/infobox/infobox.component';
 
 @NgModule({
   declarations: [
@@ -24,9 +25,10 @@ import { ItemDetailComponent } from './component/item-detail/item-detail.compone
     ItemManageComponent,
     LoadingComponent,
     UserInventoryComponent,
-    UserComponent,
     SearchComponent,
-    ItemDetailComponent
+    ItemDetailComponent,
+    ItemComponent,
+    InfoboxComponent
   ],
   imports: [
     ReactiveFormsModule,

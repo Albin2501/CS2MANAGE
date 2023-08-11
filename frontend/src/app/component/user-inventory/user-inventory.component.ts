@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { InventoryDTO } from 'src/app/dto/inventoryDTO';
 import { ProfileDTO } from 'src/app/dto/profileDTO';
@@ -16,11 +17,15 @@ export class UserInventoryComponent implements OnInit {
 
   profiles: ProfileDTO[] = [];
   inventory: InventoryDTO = {} as InventoryDTO;
+  group: boolean = true;
 
   constructor(private itemService: ItemService, private userService: UserService,
-    private profileService: ProfileService, private toastifyService: ToastifyService) { }
+    private profileService: ProfileService, private toastifyService: ToastifyService,
+    private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.getQuery();
+    this.get(this.group);
     this.getProfiles();
   }
 
@@ -46,6 +51,12 @@ export class UserInventoryComponent implements OnInit {
       error: error => {
         this.toastifyService.errorToast(error.error);
       }
+    });
+  }
+
+  getQuery(): void {
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.group = params['group'];
     });
   }
 

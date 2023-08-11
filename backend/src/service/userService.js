@@ -36,8 +36,8 @@ async function getSteamItems(group) {
     for (let i = 0; i < allDescriptions.length; i++) {
         if (allDescriptions[i].marketable) {
             dups = existingAssets.get(allDescriptions[i].classid);
-            reps = group ? 1 : dups;
-            amount = group ? dups : 1;
+            reps = group == 'true' ? 1 : dups;
+            amount = group == 'true' ? dups : 1;
 
             for (let j = 0; j < reps; j++) {
                 item = {
@@ -57,7 +57,7 @@ async function getSteamItems(group) {
 
 function editUserInfo(userInfoDTO) {
     if (!(userInfoDTO.steamId.length == 17 && userInfoDTO.steamId.startsWith('76561198')))
-        throw new Error('Format of SteamId is incorrect.');
+        throw new Error('Format of Steam ID is incorrect.');
 
     return userDatabase.edit(userMapper.userInfoDTOToUserInfo(userInfoDTO));
 }

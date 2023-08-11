@@ -3,10 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { ItemDTO } from 'src/app/dto/itemDTO';
 import { ProfileDTO } from 'src/app/dto/profileDTO';
+import { UserDTO } from 'src/app/dto/userDTO';
 import { ItemService } from 'src/app/service/item/item.service';
 import { ProfileService } from 'src/app/service/profile/profile.service';
 import { ToastifyService } from 'src/app/service/toastify/toastify.service';
-import { formatDate } from 'src/app/util/formatter';
+import { UserService } from 'src/app/service/user/user.service';
 
 @Component({
   selector: 'app-item-manage',
@@ -15,7 +16,11 @@ import { formatDate } from 'src/app/util/formatter';
 })
 export class ItemManageComponent implements OnInit {
 
+  items: ItemDTO[] = [];
   profiles: ProfileDTO[] = [];
+  user: UserDTO = {} as UserDTO;
+  group: boolean = true;
+  editMode: boolean = false;
   conditions = ['None', 'Factory New', 'Minimal Wear', 'Field-Tested', 'Well-Worn', 'Battle-Scarred'];
   createForm = this.formBuilder.group({
     name: [null, Validators.required],
@@ -25,14 +30,14 @@ export class ItemManageComponent implements OnInit {
     profileId: [null, Validators.required]
   });
 
-  items: ItemDTO[] = [];
-
   constructor(private itemService: ItemService, private profileService: ProfileService,
-    private formBuilder: FormBuilder, private toastifyService: ToastifyService) { }
+    private userService: UserService, private formBuilder: FormBuilder,
+    private toastifyService: ToastifyService) { }
 
   ngOnInit(): void {
     this.get();
     this.getProfiles();
+    this.getUser();
   }
 
   get(): void {
@@ -56,6 +61,17 @@ export class ItemManageComponent implements OnInit {
       },
       complete: () => {
         this.reset();
+      }
+    });
+  }
+
+  getUser(): void {
+    this.userService.get().subscribe({
+      next: user => {
+        this.user = user;
+      },
+      error: error => {
+        this.toastifyService.errorToast(error.error);
       }
     });
   }
@@ -85,37 +101,13 @@ export class ItemManageComponent implements OnInit {
     });
   }
 
-  edit(item: ItemDTO): void {
-    const itemEditDTO = {
-      id: item.id,
-      price: item.price,
-      amount: item.amount,
-      profileId: item.profileId
-    };
-
-    this.itemService.edit(itemEditDTO).subscribe({
+  editUser(): void {
+    this.userService.edit(this.user).subscribe({
       next: () => {
-        this.toastifyService.successToast(`Item '${item.name}' successfully edited.`);
+        this.toastifyService.successToast(`Steam ID successfully edited.`);
       },
       error: error => {
         this.toastifyService.errorToast(error.error);
-      },
-      complete: () => {
-        this.get();
-      }
-    });
-  }
-
-  delete(id: number, name: string): void {
-    this.itemService.delete(id).subscribe({
-      next: () => {
-        this.toastifyService.successToast(`Item '${name}' successfully deleted.`);
-      },
-      error: error => {
-        this.toastifyService.errorToast(error.error);
-      },
-      complete: () => {
-        this.get();
       }
     });
   }
@@ -146,9 +138,5 @@ export class ItemManageComponent implements OnInit {
       amount: [1, Validators.required],
       profileId: [this.profiles[0].id, Validators.required]
     });
-  }
-
-  formatDate(date: Date): string {
-    return formatDate(new Date(date));
   }
 }

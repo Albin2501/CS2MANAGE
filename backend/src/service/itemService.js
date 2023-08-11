@@ -163,7 +163,7 @@ async function getToBeCachedItems() {
     let possiblePriceSCM, priceSCM, possibleItemSP, priceSP;
     let priceSPEverything = await getPriceSPEverything();
 
-    // calculated price are median_price (SCM) and suggested_price (SP)
+    // calculated price are median_price (SCM) and min_price (SP)
     for (let i = 0; i < allItems.length; i++) {
         possiblePriceSCM = await getPriceSCM(allItems[i].name);
 
@@ -172,7 +172,7 @@ async function getToBeCachedItems() {
 
         if (possiblePriceSCM && possiblePriceSCM.success && (possiblePriceSCM.median_price || possiblePriceSCM.lowest_price)) {
             priceSCM = possiblePriceSCM.median_price ? getNumberFromSCMString(possiblePriceSCM.median_price) : getNumberFromSCMString(possiblePriceSCM.lowest_price);
-            linkSCM = 'https://steamcommunity.com/market/listings/730/' + allItems[i].name;
+            linkSCM = steamImageURI + allItems[i].name;
         } else {
             console.log(`The item ${allItems[i].name} could not be fetched from SCM.`);
             priceSCM = null;
@@ -180,7 +180,7 @@ async function getToBeCachedItems() {
         }
 
         if (possibleItemSP) {
-            priceSP = possibleItemSP.suggested_price;
+            priceSP = possibleItemSP.min_price;
             linkSP = possibleItemSP.market_page + getQueryParams(allItems[i].name);
         } else {
             console.log(`The item ${allItems[i].name} could not be fetched from SP.`);

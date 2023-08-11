@@ -118,7 +118,7 @@ app.get(userBase + '/get', async function (req, res) {
 
 app.get(userBase + '/getSteamItems', async function (req, res) {
     try {
-        res.send(await userService.getSteamItems(+(req.query.group)));
+        res.send(await userService.getSteamItems(req.query.group));
     } catch (err) {
         res.status(503).send(err.message);
     }

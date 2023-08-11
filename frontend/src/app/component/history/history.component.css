@@ -60,7 +60,7 @@
 }
 
 .EDIT_ITEM {
-    background: rgb(100, 129, 124);
+    background: var(--cs2Edit);
 }
 
 .DELETE_ITEM {

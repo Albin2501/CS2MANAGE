@@ -24,11 +24,6 @@ export class HeaderComponent implements OnInit {
       name: 'HISTORY',
       link: '/history',
       active: false
-    },
-    {
-      name: 'USER',
-      link: '/user',
-      active: false
     }
   ];
 

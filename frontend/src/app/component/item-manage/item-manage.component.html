@@ -1,8 +1,28 @@
-<a [routerLink]="['/items/inventory']">ADD INVENTORY</a>
-<button (click)='deleteAll()'>DELETEALL</button>
-
 <div class='createContainer'>
     <div class='create'>
+        <div class='createItem'>
+            <label for='inventory'>Steam Inventory <app-infobox></app-infobox></label>
+
+            <input type='text' name='inventory' value='{{user.steamId}}' [disabled]='!editMode'
+                [(ngModel)]='user.steamId'>
+        </div>
+
+        <div class='createItem checkbox'>
+            <label for='duplicates'>Group Duplicates</label>
+            <input type='checkbox' name='duplicates' [(ngModel)]='group'>
+        </div>
+
+        <div class='buttonContainer'>
+            <button class='edit' (click)='editMode = true' *ngIf='!editMode; else edit'>Change Steam ID ✎</button>
+            <ng-template #edit>
+                <button class='add' (click)='editMode = false; editUser()'>Save Steam ID ✎</button>
+            </ng-template>
+            <button class='add' [routerLink]="['/items/inventory']" [queryParams]="{group: group}"
+                [disabled]="!user.steamId">Add Inventory +</button>
+        </div>
+
+        <hr>
+
         <form [formGroup]='createForm'>
             <div class='createItem'>
                 <label for='name'>Name</label>
@@ -42,24 +62,12 @@
     </div>
 </div>
 
+<button (click)='deleteAll()'>DELETEALL</button>
+
 <app-search (get)='get()' [sortDeleteAmount]=2></app-search>
 
 <app-loading *ngIf='!items || items.length == 0; else display' />
 
 <ng-template #display>
-    <div class='items'>
-        <div class='item' *ngFor='let item of items'>
-            <img class='image' src='{{item.image}}' alt='Image of {{item.name}}'>
-            <div class='name'>{{item.name}}</div>
-            <input class='price' type='number' value='{{item.price}}' [(ngModel)]='item.price'>
-            <input class='amount' type='number' onkeypress='return (event.charCode == 0 || event.charCode == 8 || event.charCode == 13) ?
-                null : event.charCode >= 48 && event.charCode <= 57' value='{{item.amount}}' [(ngModel)]='item.amount'>
-            <select class='profile' [(ngModel)]='item.profileId'>
-                <option *ngFor='let profile of profiles' value='{{profile.id}}'>{{profile.name}}</option>
-            </select>
-            <div class='date'>{{formatDate(item.date)}}</div>
-            <button class='editButton' (click)='edit(item)'>✎</button>
-            <button class='deleteButton' (click)='delete(item.id, item.name)'>🗑</button>
-        </div>
-    </div>
+    <app-item [items]='items' (get)='get()'></app-item>
 </ng-template>

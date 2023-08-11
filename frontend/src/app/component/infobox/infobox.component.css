@@ -1,0 +1,43 @@
+.infoboxContainer {
+    position: relative;
+    display: inline-block;
+}
+
+.infoLetter {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    background-color: var(--cs2Orange);
+    border-radius: 100%;
+    font-size: 0.75rem;
+    text-align: center;
+}
+
+.infobox {
+    position: absolute;
+    top: -2.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--cs2Orange);
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    opacity: 0;
+    transition: opacity 0.25s ease-in-out;
+    white-space: nowrap;
+}
+
+.triangle {
+    position: absolute;
+    top: 2.35rem;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 0.25rem solid transparent;
+    border-right: 0.25rem solid transparent;
+    border-top: 0.5rem solid var(--cs2Orange);
+    ;
+}
+
+.infoboxContainer:hover .infobox {
+    opacity: 1;
+}

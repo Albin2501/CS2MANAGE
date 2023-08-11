@@ -16,7 +16,7 @@
 .createItem {
     margin: 0 1rem 0 1rem;
     display: grid;
-    grid-template-columns: 20% 80%;
+    grid-template-columns: 25% 75%;
     align-items: center;
     margin-bottom: 1rem;
 }
@@ -32,13 +32,31 @@ input {
     border-radius: 0.25rem;
     padding: 0.5rem;
     border: none;
-    width: 100%;
     color: var(--cs2White);
     background-color: var(--cs2LightBlue);
 }
 
 input:focus-within {
     outline: 1px solid var(--cs2Orange);
+}
+
+input:disabled {
+    cursor: not-allowed;
+}
+
+div .checkbox {
+    display: grid;
+    justify-items: start;
+}
+
+input[type='checkbox'] {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0;
+}
+
+.checkbox:focus-within {
+    outline: none;
 }
 
 select {
@@ -55,13 +73,9 @@ select:focus-within {
     outline: 1px solid var(--cs2Orange);
 }
 
-input:hover {
-    background-origin: var(--cs2Orange);
-}
-
 .buttonContainer {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: 1fr 1fr;
     grid-column-gap: 1rem;
     margin: 0 1rem 0 1rem;
 }
@@ -72,6 +86,10 @@ input:hover {
     border-radius: 0.25rem;
     padding: 0.25rem;
     color: var(--cs2White);
+}
+
+button {
+    cursor: pointer;
 }
 
 .reset {
@@ -95,76 +113,18 @@ input:hover {
     background-color: var(--cs2GreenOnHover);
 }
 
-.items {
-    display: grid;
-    align-items: center;
-    justify-items: center;
-}
-
-.item {
-    display: grid;
-    grid-template-columns: fit-content(1rem) 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    grid-template-areas:
-        'image name name date edit'
-        'image price amount profile delete';
-    background-color: var(--cs2LightBlue);
-    border-radius: 0.25rem;
-    margin-top: 1rem;
-    width: 100%;
-    max-width: 64rem;
-    transition: transform 0.1s;
-}
-
-.image {
-    grid-area: image;
-    background: rgb(220, 220, 220);
-    border-radius: 0.25rem 0 0 0.25rem;
-    width: 125px;
-    height: 125px;
-    align-self: center;
-    justify-self: center;
-    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.25);
-}
-
-.name {
-    grid-area: name;
-    font-size: 1.5rem;
-    align-self: center;
-    margin-left: 1reM;
-}
-
-.price {
-    grid-area: price;
-    font-size: 1rem;
-    align-self: center;
+.edit {
+    background-color: var(--cs2Edit);
 }
 
 
-.amount {
-    grid-area: amount;
-    font-size: 1rem;
-    align-self: center;
+.edit:hover {
+    background-color: var(--cs2EditOnHover);
 }
 
-.profile {
-    grid-area: profile;
-    font-size: 1rem;
-    align-self: center;
-}
-
-.date {
-    grid-area: date;
-    align-self: first baseline;
-    justify-self: last baseline;
-    padding: 0.5rem;
-    font-size: 0.75rem;
-}
-
-.editButton {
-    grid-area: edit
-}
-
-.deleteButton {
-    grid-area: delete
+hr {
+    margin: 1rem;
+    height: 2px;
+    background-color: var(--cs2Orange);
+    border: none;
 }

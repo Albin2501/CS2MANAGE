@@ -21,12 +21,12 @@ function itemToItemDTO(item, priceSCM, priceSP, linkSCM, linkSP) {
     return itemDTO;
 }
 
-function itemDTOToItem(itemDTO, image) {
+function itemDTOToItem(itemDTO, image, date) {
     const item = {
         id: null,
         name: itemDTO.name,
         image: image,
-        date: new Date(),
+        date: date ? date : new Date(),
         price: +(itemDTO.price).toFixed(2),
         amount: +(itemDTO.amount).toFixed(2),
         totalPrice: +(itemDTO.price * itemDTO.amount).toFixed(2),
@@ -38,10 +38,15 @@ function itemDTOToItem(itemDTO, image) {
 
 function itemDTOListToItemList(itemDTOList) {
     const items = [];
+    const date = new Date();
     let item;
 
+    // Since new Date() will be the same for many items (because ones PC might be fast enough),
+    // ordering those values by date will result to many issues.
+    // Therefore, an artifical time creating delay is required.
+    // This will not slow down the loop, it can only be observed in the persisted creation date!
     for (let i = 0; i < itemDTOList.length; i++) {
-        item = itemDTOToItem(itemDTOList[i], itemDTOList[i].image);
+        item = itemDTOToItem(itemDTOList[i], itemDTOList[i].image, new Date(date.setMilliseconds(date.getMilliseconds() + i)));
         items.push(item);
     }
 
