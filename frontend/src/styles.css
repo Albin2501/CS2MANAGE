@@ -8,12 +8,15 @@
 body {
     margin: 0;
     font-family: 'Nunito';
-    color: rgb(255, 254, 254);
-    background: rgb(42, 42, 50);
+    color: var(--cs2White);
+    background: var(--cs2Background);
 
-    --cs2Font: var('Arial, Helvetica, sans-serif');
+    --cs2Font: var('Nunito');
+    --cs2Background: rgb(42, 42, 50);
     --cs2Orange: rgb(255, 140, 10);
-    --cs2White: rgb(255, 255, 255);
+    --cs2LightOrange: rgb(239, 173, 97);
+    --cs2LightOrangeOnHover: rgb(244, 189, 127);
+    --cs2White: rgb(255, 254, 254);
     --cs2DarkBlue: rgb(3, 0, 10);
     --cs2LightBlue: rgb(65, 70, 90);
     --cs2LightBlueOnHover: rgb(75, 80, 100);
@@ -33,5 +36,5 @@ body::-webkit-scrollbar {
 
 a {
     text-decoration: none;
-    color: rgb(255, 255, 255);
+    color: var(--cs2White);
 }

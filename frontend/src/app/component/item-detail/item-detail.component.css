@@ -55,15 +55,24 @@
     opacity: 100%;
 }
 
-.image {
+.imageContainer {
     grid-area: image;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     background: rgb(220, 220, 220);
     border-radius: 0.25rem 0 0 0.25rem;
-    width: 125px;
-    height: 125px;
-    align-self: center;
-    justify-self: center;
     box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.25);
+    width: 8rem;
+    height: 8rem;
+    overflow: hidden;
+}
+
+.image {
+    width: 100%;
+    height: auto;
 }
 
 .name {
@@ -89,16 +98,28 @@
     align-self: center;
 }
 
+.logoPriceContainer {
+    background-size: contain;
+    background-position: center left;
+    background-repeat: no-repeat;
+    justify-self: end;
+    margin: 0 1rem 0 0;
+    width: 10rem;
+}
+
+.priceValue {
+    display: flex;
+    justify-content: flex-end;
+}
+
 .totalProfitSP {
     grid-area: totalProfitSP;
-    justify-self: end;
-    margin-right: 1rem;
+    background-image: url('../../../assets/logos/skinportLogo.png');
 }
 
 .totalProfitSCM {
     grid-area: totalProfitSCM;
-    justify-self: end;
-    margin-right: 1rem;
+    background-image: url('../../../assets/logos/steamLogo.png');
 }
 
 .date {
