@@ -7,5 +7,6 @@ export interface ItemSummaryDTO {
     totalPrice: number,
     totalProfitSCM: number,
     totalProfitSP: number,
+    failedItems: number,
     items: ItemDetailDTO[]
 }

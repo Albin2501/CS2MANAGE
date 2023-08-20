@@ -13,7 +13,7 @@ function get() {
     }));
 }
 
-function set(items) {
+function set(items, failedItems) {
     const caluclate = calculate(items);
 
     const cache = {
@@ -23,6 +23,7 @@ function set(items) {
         totalPrice: caluclate.totalPrice,
         totalProfitSCM: caluclate.totalProfitSCM,
         totalProfitSP: caluclate.totalProfitSP,
+        failedItems: failedItems,
         items: items
     };
 
@@ -71,7 +72,15 @@ function setDirty() {
     writeToFile(cache);
 }
 
-module.exports = { get, set, calculate, upToDate, dirty, setDirty };
+function eligibleRefetch() {
+    const cache = get();
+    let nowMinusOneMinute = new Date();
+    nowMinusOneMinute.setMinutes(nowMinusOneMinute.getMinutes() - 1);
+
+    return cache.failedItems.length > 0 && nowMinusOneMinute > new Date(cache.date);
+}
+
+module.exports = { get, set, calculate, upToDate, dirty, setDirty, eligibleRefetch };
 
 // ------------------------------- HELPER FUNCTIONS -------------------------------
 
@@ -83,6 +92,7 @@ function createFile() {
         totalPrice: 0,
         totalProfitSCM: 0,
         totalProfitSP: 0,
+        failedItems: [],
         items: []
     };
 

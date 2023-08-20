@@ -4,7 +4,6 @@ const historyType = require('../util/historyEntry');
 const itemDatabase = require('../persistence/itemDatabase');
 const cache = require('../persistence/cache');
 
-// TODO: Add trim to search for 'name' -> .trim()
 // TODO: profileId of items seems to be a string sometimes?
 
 // ------------------------------- EXPORTED FUNCTIONS -------------------------------
@@ -20,19 +19,29 @@ async function getAllItems(query) {
     if (!cache.upToDate() || cache.dirty()) {
         console.log('Cache is not up-to-date. New API-requests will be made.');
 
-        const toBeCached = await getToBeCachedItems();
-        cache.set(toBeCached);
+        const result = await getToBeCachedItems();
+        cache.set(result.items, result.failedItems);
     }
 
+    // check if any items failed and a refetch is required (SCM only)
+    if (cache.eligibleRefetch()) {
+        console.log('Caching of some items failed. New API-requests will be made.');
+
+        const result = await getToBeRefetchedCachedItems();
+        cache.set(result.items, result.failedItems);
+    }
+
+    let returnedCache = cache.get();
+
+    // check if any query parameter are set, otherwise return default
     if (query && (query.order || query.sort || query.name)) {
         const order = query.order ? query.order : '';
         const sort = query.sort ? query.sort : '';
-        const name = query.name ? query.name.toLowerCase() : '';
+        const name = query.name ? query.name.trim().toLowerCase() : '';
         let s1 = order == 'desc' ? -1 : 1;
         let s2 = order == 'desc' ? 1 : -1;
 
-        const toBeFilteredCache = cache.get();
-        let items = toBeFilteredCache.items;
+        let items = returnedCache.items;
 
         items = items.filter(item => item.name.toLowerCase().includes(name)); // this filters unfit items
         if (sort == 'date' || sort == 'name') items = items.sort((a, b) => { return a[sort] < b[sort] ? s2 : s1 });
@@ -40,17 +49,17 @@ async function getAllItems(query) {
         // because the item list could be reduced, the calculations need to be redone
         const calculate = cache.calculate(items);
 
-        toBeFilteredCache.amount = calculate.amount;
-        toBeFilteredCache.totalPrice = calculate.totalPrice;
-        toBeFilteredCache.totalProfitSCM = calculate.totalProfitSCM;
-        toBeFilteredCache.totalProfitSP = calculate.totalProfitSP;
-        toBeFilteredCache.items = items;
-
-        return toBeFilteredCache;
+        returnedCache.amount = calculate.amount;
+        returnedCache.totalPrice = calculate.totalPrice;
+        returnedCache.totalProfitSCM = calculate.totalProfitSCM;
+        returnedCache.totalProfitSP = calculate.totalProfitSP;
+        returnedCache.items = items;
     }
 
+    returnedCache.failedItems = returnedCache.failedItems.length;
+
     // default: date, descending
-    return cache.get();
+    return returnedCache;
 }
 
 /**
@@ -65,7 +74,7 @@ function getAllOverviewItems(query) {
     if (query && (query.order || query.sort || query.name)) {
         const order = query.order ? query.order : '';
         const sort = query.sort ? query.sort : '';
-        const name = query.name ? query.name.toLowerCase() : '';
+        const name = query.name ? query.name.trim().toLowerCase() : '';
         let s1 = order == 'desc' ? -1 : 1;
         let s2 = order == 'desc' ? 1 : -1;
 
@@ -159,13 +168,18 @@ const skinportURI = 'https://api.skinport.com/v1/items';
 
 async function getToBeCachedItems() {
     const allItems = itemDatabase.get().items;
+    const decisionSPConstant = 2; // chosen at random
     let toBeCached = [];
-    let possiblePriceSCM, priceSCM, possibleItemSP, priceSP;
+    let failedItems = [];
+    let possiblePriceSCM, priceSCM, possibleItemSP, priceSP, linkSCM, linkSP;
     let priceSPEverything = await getPriceSPEverything();
+    let decisionSP;
+    let failedSCM;
 
-    // calculated price are median_price (SCM) and min_price (SP)
+    // calculated price are median_price (SCM) and suggested_price (sometimes min_price) (SP)
     for (let i = 0; i < allItems.length; i++) {
         possiblePriceSCM = await getPriceSCM(allItems[i].name);
+        failedSCM = false;
 
         filteredArray = priceSPEverything.filter(item => allItems[i].name.localeCompare(item.market_hash_name) == 0);
         possibleItemSP = filteredArray.length > 0 ? filteredArray[0] : null;
@@ -174,13 +188,15 @@ async function getToBeCachedItems() {
             priceSCM = possiblePriceSCM.median_price ? getNumberFromSCMString(possiblePriceSCM.median_price) : getNumberFromSCMString(possiblePriceSCM.lowest_price);
             linkSCM = steamImageURI + allItems[i].name;
         } else {
-            console.log(`The item ${allItems[i].name} could not be fetched from SCM.`);
+            failedSCM = true;
             priceSCM = null;
             linkSCM = null;
         }
 
         if (possibleItemSP) {
-            priceSP = possibleItemSP.min_price;
+            // some items will have inaccurate suggested prices, therefore the minimal price will be taken in those occasions
+            decisionSP = possibleItemSP.min_price * decisionSPConstant > possibleItemSP.suggested_price;
+            priceSP = decisionSP ? possibleItemSP.suggested_price : possibleItemSP.min_price;
             linkSP = possibleItemSP.market_page + getQueryParams(allItems[i].name);
         } else {
             console.log(`The item ${allItems[i].name} could not be fetched from SP.`);
@@ -188,9 +204,48 @@ async function getToBeCachedItems() {
             linkSP = null;
         }
 
+        if (failedSCM) failedItems.push(itemMapper.itemToItemDTO(allItems[i], priceSCM, priceSP, linkSCM, linkSP));
         toBeCached.push(itemMapper.itemToItemDTO(allItems[i], priceSCM, priceSP, linkSCM, linkSP));
     }
-    return toBeCached;
+
+    return { items: toBeCached, failedItems: failedItems };
+}
+
+async function getToBeRefetchedCachedItems() {
+    const currentCache = cache.get();
+    let toBeCached = currentCache.items;
+    let failedItems = currentCache.failedItems;
+    let failedItemsNew = [];
+    let possiblePriceSCM, priceSCM, linkSCM;
+    let itemDTO;
+    let dup;
+
+    for (let i = 0; i < failedItems.length; i++) {
+        possiblePriceSCM = await getPriceSCM(failedItems[i].name);
+
+        if (possiblePriceSCM && possiblePriceSCM.success && (possiblePriceSCM.median_price || possiblePriceSCM.lowest_price)) {
+            priceSCM = possiblePriceSCM.median_price ? getNumberFromSCMString(possiblePriceSCM.median_price) : getNumberFromSCMString(possiblePriceSCM.lowest_price);
+            linkSCM = steamImageURI + failedItems[i].name;
+            itemDTO = itemMapper.itemToItemDTO(failedItems[i], priceSCM, failedItems[i].priceSP, linkSCM, failedItems[i].linkSP);
+            dup = false;
+
+            // check for duplicate
+            for (let j = 0; j < toBeCached.length; j++) {
+                if (toBeCached[j].id == failedItems[i].id) {
+                    toBeCached[j] = itemDTO;
+                    dup = true;
+                }
+            }
+
+            if (!dup) toBeCached.push(itemDTO);
+        } else {
+            priceSCM = null;
+            linkSCM = null;
+            failedItemsNew.push(itemMapper.itemToItemDTO(failedItems[i], priceSCM, failedItems[i].priceSP, linkSCM, failedItems[i].linkSP));
+        }
+    }
+
+    return { items: toBeCached, failedItems: failedItemsNew };
 }
 
 async function getPriceSCM(name) {

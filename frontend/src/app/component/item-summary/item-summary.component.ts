@@ -27,6 +27,10 @@ export class ItemSummaryComponent implements OnInit {
       },
       error: error => {
         this.toastifyService.errorToast(error.error);
+      },
+      complete: () => {
+        const number = this.itemSummary.failedItems;
+        if (number > 0) this.toastifyService.infoToast(`Steam value of ${number} item${number > 1 ? 's' : ''} could not be fetched. Try again later.`);;
       }
     });
   }

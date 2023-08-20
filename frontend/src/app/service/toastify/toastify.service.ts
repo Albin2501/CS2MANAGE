@@ -16,6 +16,10 @@ export class ToastifyService {
     this.toast(text, 'var(--cs2DarkRed)', 5000);
   }
 
+  infoToast(text: string): void {
+    this.toast(text, 'var(--cs2Edit)', 5000);
+  }
+
   private toast(text: string, backgroundColor: string, durationTime: number): void {
     Toastify({
       text: text,
