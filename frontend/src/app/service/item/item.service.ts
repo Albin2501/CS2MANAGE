@@ -18,21 +18,23 @@ export class ItemService {
   constructor(private http: HttpClient, private route: ActivatedRoute) { }
 
   get(): Observable<ItemSummaryDTO> {
-    let sort, order, name;
+    let sort, order, name, cacheDirty;
 
     this.route.queryParams.subscribe(params => {
       sort = params['sort'];
       order = params['order'];
       name = params['name'];
+      cacheDirty = params['cacheDirty'];
     });
 
-    if (!(sort || order || name)) return this.http.get<ItemSummaryDTO>(this.itemBase + '/get');
+    if (!(sort || order || name || cacheDirty)) return this.http.get<ItemSummaryDTO>(this.itemBase + '/get');
 
     sort = sort ? sort : 'date';
     order = order ? order : 'desc';
     name = name ? name : '';
+    cacheDirty = cacheDirty ? cacheDirty : false;
 
-    const options = { params: new HttpParams().set('sort', sort).set('order', order).set('name', name) };
+    const options = { params: new HttpParams().set('sort', sort).set('order', order).set('name', name).set('cacheDirty', cacheDirty) };
     return this.http.get<ItemSummaryDTO>(this.itemBase + '/get', options);
   }
 

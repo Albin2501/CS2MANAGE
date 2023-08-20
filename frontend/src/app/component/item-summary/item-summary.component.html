@@ -1,4 +1,4 @@
-<app-search (get)='get()'></app-search>
+<app-search (get)='get()' (reset)='reset()' [type]="'itemSummary'"></app-search>
 
 <app-loading *ngIf='!itemSummary.items || itemSummary.items.length == 0; else display' />
 

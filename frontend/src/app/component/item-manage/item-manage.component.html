@@ -1,3 +1,11 @@
+<div *ngIf='warned' class='dialogOverlay'>
+    <div class='dialog'>
+        <span>Are you sure you want to delete all items? This can not be reversed.</span>
+        <button class='button' (click)='warnUser()'>Cancel</button>
+        <button class='button danger' (click)='deleteAll()'>Delete All</button>
+    </div>
+</div>
+
 <div class='createContainer'>
     <div class='create'>
         <div class='createItem'>
@@ -62,9 +70,7 @@
     </div>
 </div>
 
-<button (click)='deleteAll()'>DELETEALL</button>
-
-<app-search (get)='get()' [sortDeleteAmount]=2></app-search>
+<app-search (get)='get()' (deleteAll)='warnUser()' [type]="'itemManage'"></app-search>
 
 <app-loading *ngIf='!items || items.length == 0; else display' />
 

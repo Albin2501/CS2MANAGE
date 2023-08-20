@@ -2,13 +2,21 @@
     <div class='options'>
         <div class='searchContainer'>
             <input class='searchInput' type='search' placeholder='Search'
-                (keypress)='$event.key == "Enter" ? setObjects(true, search.value) : {};' #search>
-            <button class=' searchButton' type='button' (click)='setObjects(true, search.value)'>🔍</button>
+                (keypress)='$event.key == "Enter" ? setObjects("name", search.value) : {};' #search>
+            <button class=' searchButton' type='button' (click)='setObjects("name", search.value)'>🔍</button>
         </div>
-        <div *ngFor=' let sort of sorts' class='option sort'
-            [ngClass]="{'active': sort.active, 'inactive': !sort.active}" (click)='setObjects(false, sort.value)'>
+        <div *ngFor='let sort of sorts' class='option sort'
+            [ngClass]="{'active': sort.active, 'inactive': !sort.active}" (click)='setObjects("sort", sort.value)'>
             {{sort.name}} <span
                 [ngClass]="{'activeOrder': sort.active, 'inactiveOrder': !sort.active}">{{getRepresentationOfOrder(sort.order)}}</span>
+        </div>
+        <div class='option'>
+            |
+        </div>
+        <div class='option'>
+            <button *ngIf='button.value == "cacheDirty"'
+                (click)='setObjects(button.value, button.value)'>{{button.name}}</button>
+            <button *ngIf='button.value == "deleteAll"' (click)='deleteAllFunc()'>{{button.name}}</button>
         </div>
     </div>
 </div>

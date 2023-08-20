@@ -8,8 +8,10 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 })
 export class SearchComponent implements OnInit {
 
-  @Input() sortDeleteAmount: number = 0;
+  @Input() type: string = '';
   @Output() get: EventEmitter<void> = new EventEmitter<void>();
+  @Output() reset: EventEmitter<void> = new EventEmitter<void>();
+  @Output() deleteAll: EventEmitter<void> = new EventEmitter<void>();
   name: string = '';
   sorts = [
     {
@@ -43,16 +45,33 @@ export class SearchComponent implements OnInit {
       order: true
     }
   ];
+  buttons = [
+    {
+      name: 'Refresh Prices ⟳',
+      value: 'cacheDirty'
+    },
+    {
+      name: 'Delete All 🗑',
+      value: 'deleteAll'
+    }
+  ];
+  button = this.buttons[0];
 
   constructor(private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.setSorts();
+    this.setButtons();
     this.setObjectsIntial();
   }
 
   setSorts(): void {
-    this.sorts.splice(this.sorts.length - this.sortDeleteAmount, this.sortDeleteAmount);
+    if (this.type == 'itemManage') this.sorts.splice(this.sorts.length - 2, 2);
+  }
+
+  setButtons(): void {
+    if (this.type == 'itemSummary') this.button = this.buttons[0];
+    if (this.type == 'itemManage') this.button = this.buttons[1];
   }
 
   setObjectsIntial(): void {
@@ -86,10 +105,10 @@ export class SearchComponent implements OnInit {
     if (name) this.name = name;
   }
 
-  setObjects(name: boolean, value: string): void {
+  setObjects(object: string, value: string): void {
     const queryParams = {} as Params;
 
-    if (!name) {
+    if (object == 'sort') {
       // sets active sort, deactivates all other sorts
       for (let i = 0; i < this.sorts.length; i++) {
         if (value == this.sorts[i].value) {
@@ -100,9 +119,13 @@ export class SearchComponent implements OnInit {
           this.sorts[i].order = true;
         }
       }
-    } else {
+    } else if (object == 'name') {
       // sets name
       this.name = value;
+    } else if (object == 'cacheDirty') {
+      // sets cache dirty
+      queryParams[value] = true;
+      this.reset.emit();
     }
 
     queryParams['sort'] = this.getActiveSort().value;
@@ -115,6 +138,10 @@ export class SearchComponent implements OnInit {
     }).then(() => {
       this.get.emit();
     });
+  }
+
+  deleteAllFunc(): void {
+    this.deleteAll.emit();
   }
 
   getActiveSort() {

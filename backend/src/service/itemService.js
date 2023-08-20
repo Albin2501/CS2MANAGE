@@ -16,7 +16,7 @@ const cache = require('../persistence/cache');
  * @return {Object}         Cache containing metadata and items
  */
 async function getAllItems(query) {
-    if (!cache.upToDate() || cache.dirty()) {
+    if (!cache.upToDate() || cache.dirty() || query.cacheDirty == 'true') {
         console.log('Cache is not up-to-date. New API-requests will be made.');
 
         const result = await getToBeCachedItems();

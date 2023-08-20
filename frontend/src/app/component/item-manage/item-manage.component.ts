@@ -29,6 +29,7 @@ export class ItemManageComponent implements OnInit {
     amount: [1, Validators.required],
     profileId: [null, Validators.required]
   });
+  warned: boolean = false;
 
   constructor(private itemService: ItemService, private profileService: ProfileService,
     private userService: UserService, private formBuilder: FormBuilder,
@@ -112,7 +113,12 @@ export class ItemManageComponent implements OnInit {
     });
   }
 
+  warnUser(): void {
+    this.warned = !this.warned;
+  }
+
   deleteAll(): void {
+    this.warned = false;
     this.itemService.deleteAll().subscribe({
       next: () => {
         this.toastifyService.successToast(`All items successfully deleted.`);

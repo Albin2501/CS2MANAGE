@@ -128,3 +128,48 @@ hr {
     background-color: var(--cs2Orange);
     border: none;
 }
+
+.dialog {
+    background-color: var(--cs2DarkBlue);
+    border-radius: 0.25rem;
+    font-size: 1.25rem;
+    padding: 1rem;
+    text-align: center;
+    max-width: 20rem;
+    margin: auto;
+}
+
+.dialogOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+.dialog .button {
+    border: none;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    padding: 0.25rem;
+    margin: 0.5rem 1rem 0 1rem;
+    color: var(--cs2White);
+    background-color: var(--cs2LightBlue);
+}
+
+.dialog .button:hover {
+    background-color: var(--cs2LightBlueOnHover);
+}
+
+.dialog .danger {
+    background-color: var(--cs2Red);
+}
+
+.dialog .danger:hover {
+    background-color: var(--cs2RedOnHover);
+}

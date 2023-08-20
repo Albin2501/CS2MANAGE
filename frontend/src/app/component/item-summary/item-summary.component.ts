@@ -30,9 +30,13 @@ export class ItemSummaryComponent implements OnInit {
       },
       complete: () => {
         const number = this.itemSummary.failedItems;
-        if (number > 0) this.toastifyService.infoToast(`Steam value of ${number} item${number > 1 ? 's' : ''} could not be fetched. Try again later.`);;
+        if (number > 0) this.toastifyService.infoToast(`Steam prices of ${number} item${number > 1 ? 's' : ''} could not be fetched. Try again later.`);
       }
     });
+  }
+
+  reset(): void {
+    this.itemSummary = {} as ItemSummaryDTO;
   }
 
   formatDate(date: Date): string {

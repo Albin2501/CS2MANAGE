@@ -14,8 +14,7 @@ body {
     --cs2Font: var('Nunito');
     --cs2Background: rgb(42, 42, 50);
     --cs2Orange: rgb(255, 140, 10);
-    --cs2LightOrange: rgb(239, 173, 97);
-    --cs2LightOrangeOnHover: rgb(244, 189, 127);
+    --cs2OrangeOnHover: rgb(246, 162, 65);
     --cs2White: rgb(255, 254, 254);
     --cs2DarkBlue: rgb(3, 0, 10);
     --cs2LightBlue: rgb(65, 70, 90);
